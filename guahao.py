@@ -11,8 +11,7 @@ import urllib
 import urllib2
 from multiprocessing.dummy import Pool
 
-user = '622526198705312025'
-password = 'liyang123!@#'
+
 
 
 def get_source(url):
