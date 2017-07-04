@@ -25,7 +25,6 @@ def get_departmentid():
 #    print html.decode('utf-8')
     selector = lxml.html.document_fromstring(source)
     dt_list = selector.xpath('//dt/a/@href')
-#    print dt_list
     return dt_list
 
 def get_doctor_list(dt_list):
