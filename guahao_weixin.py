@@ -5,7 +5,7 @@ robot = werobot.WeRoBot(token='ce1Jcs')
 @robot.text
 def hello_world(message,session):
 
-    return session.content
+    return session
 
 
 robot.config['HOST'] = '172.17.76.183'
