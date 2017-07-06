@@ -3,7 +3,7 @@ import werobot
 robot = werobot.WeRoBot(token='ce1Jcs')
 
 @robot.text
-def hello_world(message,session):
+def hello_world(message):
 
     return message
 
