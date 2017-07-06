@@ -4,7 +4,7 @@ robot = werobot.WeRoBot(token='ce1Jcs')
 
 @robot.text
 def hello_world(message,session):
-    print session
+
     return message
 
 
