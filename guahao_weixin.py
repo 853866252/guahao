@@ -5,7 +5,7 @@ from werobot import WeRoBot
 robot = werobot.WeRoBot(token='ce1Jcs')
 
 
-@robot.subscribe_event
+@robot.subscribe
 def intro(message):
     return "欢迎来到任式机器，目前提供自动预定挂号抢号服务"
 
