@@ -2,21 +2,31 @@
 # -*- coding: UTF-8 -*-
 import werobot
 from werobot import WeRoBot
+import requests
 robot = werobot.WeRoBot(token='ce1Jcs')
 
 
 @robot.subscribe
 def intro(message):
-    return "欢迎来到任式机器，目前提供自动预定挂号抢号服务"
+    return "欢迎来到任式机器，目前提供自动预定挂号抢号服务。\n想挂号请输入1"
 
 @robot.text
 def hello(message, session):
-    print session
-    print message
-    count = session.get("count", 0) + 1
-    print session
-    session["count"] = count
-    return "Hello! You have sent %s messages to me" % count
+    url = 'http://www.tuling123.com/openapi/api'
+    datas = {}
+    datas['key'] = '852a620fce214d28bb635e074ebb7fba'
+    datas['info'] = message.content
+    html = requests.post(url,data=datas)
+    return html
+
+ #   if message == '1':
+#        return
+#    print session
+#    print message
+#    count = session.get("count", 0) + 1
+#    print session
+#    session["count"] = count
+#    return "Hello! You have sent %s messages to me" % count
 
 
 
