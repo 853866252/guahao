@@ -17,7 +17,7 @@ def hello(message, session):
     datas['key'] = '852a620fce214d28bb635e074ebb7fba'
     datas['info'] = message.content
     html = requests.post(url,data=datas)
-    return html
+    return html.content
 
  #   if message == '1':
 #        return
@@ -30,7 +30,7 @@ def hello(message, session):
 
 
 
-robot.config['HOST'] = '172.17.76.183'
+robot.config['HOST'] = '127.0.0.1'
 robot.config['PORT'] = 80
 
 #robot.config["APP_ID"] = "你的 AppID"
