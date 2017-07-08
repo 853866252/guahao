@@ -30,7 +30,7 @@ def hello(message, session):
 
 
 
-robot.config['HOST'] = '127.0.0.1'
+robot.config['HOST'] = '172.17.76.183'
 robot.config['PORT'] = 80
 
 #robot.config["APP_ID"] = "你的 AppID"
