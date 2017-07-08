@@ -16,8 +16,8 @@ def hello(message, session):
     datas = {}
     datas['key'] = '852a620fce214d28bb635e074ebb7fba'
     datas['info'] = message.content
-    html = requests.post(url,data=datas)
-    return html.content
+    html = requests.post(url,data=datas).content
+    return eval(html)['text']
 
  #   if message == '1':
 #        return
