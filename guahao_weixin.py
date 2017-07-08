@@ -12,11 +12,9 @@ def intro(message):
 @robot.text
 def hello(message, session):
     count = session.get("count", 0) + 1
+    print session
     session["count"] = count
     return "Hello! You have sent %s messages to me" % count
-
-
-
 
 
 
