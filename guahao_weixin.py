@@ -11,6 +11,7 @@ def intro(message):
 
 @robot.text
 def hello(message, session):
+    print session
     count = session.get("count", 0) + 1
     print session
     session["count"] = count
