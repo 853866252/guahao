@@ -86,7 +86,7 @@ def get_book_items(doctor_info):
 
 
 def register(patient_info,doctor_info,date_time):
-    url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId={patientid}&clinicLabelId='.format(patientid=patient_info['Accountid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
+    url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId={patientid}&clinicLabelId='.format(patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
     session = requests.Session()
     html = session.post(url).content
     print html
@@ -125,16 +125,16 @@ def hello(message, session):
         patient_name = col1.find({'session':sess})
         print patient_name
         for each in patient_name:
-            print each
+            patientinfo = each
         print doctor_info
         print type(doctor_info)
 #        print patientinfo
 #        print type(patientinfo)
         date_time = get_book_items(doctor_info)
-        patientinfo = {
-                        "Accoutid" : "610100211001776408",
-                        "session" : "oFH6sjvzumHnFCcXrVLXBumTIo3Y"
-        }
+#        patientinfo = {
+#                        "Accoutid" : "610100211001776408",
+#                        "session" : "oFH6sjvzumHnFCcXrVLXBumTIo3Y"
+#        }
         back = register(patientinfo,doctor_info, date_time)
         return back
 
