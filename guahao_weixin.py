@@ -121,13 +121,13 @@ def hello(message, session):
         patient_name = col1.find({'session':message.source.encode('utf-8')})
         print patient_name
         for each in patient_name:
-            patient_info = each
+            patientinfo = each
         print doctor_info
         print type(doctor_info)
-#        print patient_info
-        print type(patient_info)
+#        print patientinfo
+        print type(patientinfo)
         date_time = get_book_items(doctor_info)
-        back = register(patient_info,doctor_info, date_time)
+        back = register(patientinfo,doctor_info, date_time)
         return back
 
     else:
