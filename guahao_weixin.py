@@ -25,9 +25,6 @@ def hello(message, session):
         print row
     id = message.source
     print id
-#    session = session_storage[id]
-    print session
-#    datas['userid'] = session
     html = requests.post(url,data=datas).content
     return eval(html)['text']
 
