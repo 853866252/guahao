@@ -16,6 +16,8 @@ def intro(message):
 def hello(message, session):
     task = message.content
     task = task.split('/')
+    print task
+    type(task[0])
     if task[0] == '登录':
         return 1
 
