@@ -111,13 +111,14 @@ def hello(message, session):
         client = pymongo.MongoClient(host='172.17.76.183',port=27017)
         database = client.xachyy_DBS
         col1 = database.doctor_info
-        col2 = database.Patient_info
+
         a = message.source.encode('utf-8')
         print a
         doctor_name = col1.find({'Name': task[1].encode('utf-8')})
         for each in doctor_name:
             doctor_info = each
-        patient_name = col2.find({'session':message.source.encode('utf-8')})
+        col1 = database.Patient_info
+        patient_name = col1.find({'session':message.source.encode('utf-8')})
         print patient_name
         for each in patient_name:
             patient_info = each
