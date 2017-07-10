@@ -115,9 +115,10 @@ def hello(message, session):
         a = message.source.encode('utf-8')
         print a
         doctor_name = col1.find({'Name': task[1].encode('utf-8')})
-        patient_name = col2.find({'session':message.source.encode('utf-8')})
         for each in doctor_name:
             doctor_info = each
+        patient_name = col2.find({'session':message.source.encode('utf-8')})
+        print patient_name
         for each in patient_name:
             patient_info = each
         print doctor_info
