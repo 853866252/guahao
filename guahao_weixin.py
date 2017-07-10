@@ -19,7 +19,7 @@ def get_verify():
     return session_id,code_id
 
 def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
-    client = pymongo.MongoClient()
+    client = pymongo.MongoClient(host='172.17.76.183',port=27017)
     database = client.Patient
     col = database.Patient_info
     patient = {}
