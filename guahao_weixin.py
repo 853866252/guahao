@@ -10,22 +10,27 @@ robot = werobot.WeRoBot(token='ce1Jcs')
 
 @robot.subscribe
 def intro(message):
-    return "欢迎来到任式机器，目前提供自动预定挂号抢号服务。\n想挂号请输入1"
+    return "欢迎来到任式机器，目前提供自动预定挂号及抢号服务。\n挂号分为两个步骤：\n1）输入：登录/用户名/密码（仅需一次）\n2）输入：挂号/医生名称/现在或抢号"
 
 @robot.text
 def hello(message, session):
-    url = 'http://www.tuling123.com/openapi/api'
-    datas = {}
-    datas['key'] = '852a620fce214d28bb635e074ebb7fba'
-    datas['info'] = message.content
-#    conn = sqlite3.connect('werobot_session.sqlite3')
-#    cursor = conn.execute("SELECT id FROM WeRoBot")
-#    for row in cursor:
-#        print row
-    id = message.source
-    datas['userid'] = id
-    html = requests.post(url,data=datas).content
-    return eval(html)['text']
+    task = message.content
+    task = task.split('/')
+    if task[0] == '登录':
+        return 1
+
+    elif task[0] == '挂号':
+        return 2
+
+    else:
+        url = 'http://www.tuling123.com/openapi/api'
+        datas = {}
+        datas['key'] = '852a620fce214d28bb635e074ebb7fba'
+        datas['info'] = message.content
+        id = message.source
+        datas['userid'] = id
+        html = requests.post(url,data=datas).content
+        return eval(html)['text']
 
  #   if message == '1':
 #        return
