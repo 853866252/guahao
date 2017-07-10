@@ -131,10 +131,10 @@ def hello(message, session):
 #        print patientinfo
 #        print type(patientinfo)
         date_time = get_book_items(doctor_info)
-#        patientinfo = {
-#                        "Accoutid" : "610100211001776408",
-#                        "session" : "oFH6sjvzumHnFCcXrVLXBumTIo3Y"
-#        }
+        patientinfo = {
+                        "Accoutid" : "610100211001776408",
+                        "session" : "oFH6sjvzumHnFCcXrVLXBumTIo3Y"
+        }
         back = register(patientinfo,doctor_info, date_time)
         return back
 
