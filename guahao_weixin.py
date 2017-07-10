@@ -53,7 +53,7 @@ def hello(message, session):
     if task[0].encode('utf-8') == '登录':
         session_id, code_id = get_verify()
         identify_id = task[1].encode('utf-8')
-        password = hashlib.md5(task[2].encode('utf-8'))
+        password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
         back = get_patientId(message.source,session_id, code_id, identify_id, password)
         return back
 
