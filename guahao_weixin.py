@@ -18,12 +18,12 @@ def hello(message, session):
     datas = {}
     datas['key'] = '852a620fce214d28bb635e074ebb7fba'
     datas['info'] = message.content
-    conn = sqlite3.connect('werobot_session.sqlite3')
-    cursor = conn.execute("SELECT id FROM WeRoBot")
-    for row in cursor:
-        print row
+#    conn = sqlite3.connect('werobot_session.sqlite3')
+#    cursor = conn.execute("SELECT id FROM WeRoBot")
+#    for row in cursor:
+#        print row
     id = message.source
-    print id
+    datas['userid'] = id
     html = requests.post(url,data=datas).content
     return eval(html)['text']
 
