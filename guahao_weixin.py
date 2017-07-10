@@ -1,6 +1,7 @@
 #/usr/bin/env python
 # -*- coding: UTF-8 -*-
 import werobot
+import sqlite3
 from werobot import WeRoBot
 import requests
 from werobot.session.sqlitestorage import SQLiteStorage
@@ -18,8 +19,13 @@ def hello(message, session):
     datas = {}
     datas['key'] = '852a620fce214d28bb635e074ebb7fba'
     datas['info'] = message.content
+    conn = sqlite3.connect('werobot_session.sqlite3')
+    cursor = conn.execute("SELECT id FROM WeRoBot")
+    for row in cursor:
+        print row
     id = message.source
-    session = session_storage[id]
+    print id
+#    session = session_storage[id]
     print session
 #    datas['userid'] = session
     html = requests.post(url,data=datas).content
