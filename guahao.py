@@ -9,8 +9,6 @@ import re
 import datetime
 import urllib
 import urllib2
-import pytesseract
-from PIL import Image
 from multiprocessing.dummy import Pool
 
 def get_source(url):
