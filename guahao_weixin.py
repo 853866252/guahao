@@ -19,10 +19,10 @@ def hello(message, session):
     print task
     type(task[0])
     if task[0].encode('utf-8') == '登录':
-        return 1
+        return "1"
 
     elif task[0].encode('utf-8') == '挂号':
-        return 2
+        return "2"
 
     else:
         url = 'http://www.tuling123.com/openapi/api'
