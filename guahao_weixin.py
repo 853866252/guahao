@@ -4,9 +4,8 @@ import werobot
 import sqlite3
 from werobot import WeRoBot
 import requests
-from werobot.session.sqlitestorage import SQLiteStorage
-session_storage = SQLiteStorage
-robot = werobot.WeRoBot(token='ce1Jcs',enable_session=True,session_storage=session_storage)
+
+robot = werobot.WeRoBot(token='ce1Jcs')
 
 
 @robot.subscribe
