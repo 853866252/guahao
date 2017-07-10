@@ -162,7 +162,7 @@ if __name__ == '__main__':
         print ('1.爬取医生信息\n2.输入预定医生信息\n3.登录获取ID\n4.退出')
         n = input('please input number:')
         if n == 1:
-            client = pymongo.MongoClient()
+            client = pymongo.MongoClient(host='172.17.76.183',port=27017)
             database = client.xachyy_DBS
             col = database.doctor_info
             dt_list = get_departmentid()
