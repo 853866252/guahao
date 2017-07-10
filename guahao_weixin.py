@@ -28,8 +28,8 @@ def get_verify():
 
 def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
     client = pymongo.MongoClient(host='172.17.76.183',port=27017)
-    database = client.Patient
-    col2 = database.Patient_info
+    database2 = client.Patient
+    col2 = database2.Patient_info
     patient = {}
     i = 'ASP.NET_SessionId={session}; HBHOSPITALCODE={code}'.format(session=session_id,code=code_id)
     cookie = {'Cookie': i}
@@ -110,31 +110,20 @@ def hello(message, session):
 
     elif task[0].encode('utf-8') == '挂号':
         client = pymongo.MongoClient(host='172.17.76.183',port=27017)
-        database = client.xachyy_DBS
-        col1 = database.doctor_info
+        database1 = client.xachyy_DBS
+        database2 = client.Patient
+        col1 = database1.doctor_info
+        col2 = database2.Patient_info
 
         a = message.source.encode('utf-8')
         print a
         doctor_name = col1.find({'Name': task[1].encode('utf-8')})
         for each in doctor_name:
             doctor_info = each
-        col1 = database.Patient_info
-        print message.source.encode('utf-8')
-        print type(message.source.encode('utf-8'))
-        sess = message.source.encode('utf-8')
-        patient_name = col1.find({'session':sess})
-        print patient_name
+        patient_name = col2.find({'session':message.source.encode('utf-8')})
         for each in patient_name:
             patientinfo = each
-        print doctor_info
-        print type(doctor_info)
-#        print patientinfo
-#        print type(patientinfo)
         date_time = get_book_items(doctor_info)
-        patientinfo = {
-                        "Accoutid" : "610100211001776408",
-                        "session" : "oFH6sjvzumHnFCcXrVLXBumTIo3Y"
-        }
         back = register(patientinfo,doctor_info, date_time)
         return back
 
