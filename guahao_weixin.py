@@ -112,6 +112,8 @@ def hello(message, session):
         database = client.xachyy_DBS
         col1 = database.doctor_info
         col2 = database.Patient_info
+        a = message.source.encode('utf-8')
+        print a
         doctor_name = col1.find({'Name': task[1].encode('utf-8')})
         patient_name = col2.find({'session':message.source.encode('utf-8')})
         for each in doctor_name:
