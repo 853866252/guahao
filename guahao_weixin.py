@@ -125,7 +125,7 @@ def hello(message, session):
         print doctor_info
         print type(doctor_info)
 #        print patientinfo
-        print type(patientinfo)
+#        print type(patientinfo)
         date_time = get_book_items(doctor_info)
         back = register(patientinfo,doctor_info, date_time)
         return back
