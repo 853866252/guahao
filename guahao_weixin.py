@@ -119,10 +119,13 @@ def hello(message, session):
         for each in doctor_name:
             doctor_info = each
         col1 = database.Patient_info
-        patient_name = col1.find({'session':message.source.encode('utf-8')})
+        print message.source.encode('utf-8')
+        print type(message.source.encode('utf-8'))
+        sess = message.source.encode('utf-8')
+        patient_name = col1.find({'session':sess})
         print patient_name
         for each in patient_name:
-            patientinfo = each
+            print each
         print doctor_info
         print type(doctor_info)
 #        print patientinfo
