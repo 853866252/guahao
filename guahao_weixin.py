@@ -89,7 +89,7 @@ def register(patient_info,doctor_info,date_time):
     url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId={patientid}&clinicLabelId='.format(patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
     session = requests.Session()
     html = session.post(url).content
-    print html
+    return html
 
 @robot.subscribe
 def intro(message):
