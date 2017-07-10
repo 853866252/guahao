@@ -9,6 +9,7 @@ import re
 import urllib2
 import pymongo
 import lxml
+import lxml.html
 import datetime
 robot = werobot.WeRoBot(token='ce1Jcs')
 
