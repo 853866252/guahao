@@ -18,10 +18,10 @@ def hello(message, session):
     task = task.split('/')
     print task
     type(task[0])
-    if task[0] == '登录':
+    if task[0].encode('utf-8') == '登录':
         return 1
 
-    elif task[0] == '挂号':
+    elif task[0].encode('utf-8') == '挂号':
         return 2
 
     else:
