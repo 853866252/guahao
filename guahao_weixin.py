@@ -28,7 +28,7 @@ def get_verify():
 def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
     client = pymongo.MongoClient(host='172.17.76.183',port=27017)
     database = client.Patient
-    col = database.Patient_info
+    col2 = database.Patient_info
     patient = {}
     i = 'ASP.NET_SessionId={session}; HBHOSPITALCODE={code}'.format(session=session_id,code=code_id)
     cookie = {'Cookie': i}
@@ -45,7 +45,7 @@ def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
         patient['session'] = weixin_session.encode('utf-8')
         patient['Accoutid'] = a[0]
         print patient
-        col.insert(patient)
+        col2.insert(patient)
         return "登录成功"
     else:
         return "登录用户名或密码错误，请重新输入"
@@ -84,9 +84,8 @@ def get_book_items(doctor_info):
         return date_time
 
 
-def register(doctor_info,date_time):
-    cookie = {'Cookie':'_gscu_511672516=98488034m3kugq10; Hm_lvt_70ded3ee32333aff6a77cf99eec6f0f8=1498488193,1498488194,1498489857,1499003956; Hm_lpvt_70ded3ee32333aff6a77cf99eec6f0f8=1499009739; ASP.NET_SessionId=v2cxqnaqpbf1rocazpr1o5t4; HBHOSPITALCODE=2953; Passport_Service=865EAD1375C8E57D9DA23CDF2D7AC06DF5AEB7AD4524CE2C19C08BEEB2C7958B0E7438193E79C85F7AFB66037BB96D85C32BAA46EDBA3DEE2E31E2056E2EA625924A2028D71E4923464CCCF480C991E302DFC51D20E8F7485992EDCC3AA344490F8C15DE723CF0E24095E6955F6898659BF81C455FCC66399F113292185C5E2BBF51794384628D4C5B489E4D8F4FB1D8FB025420F8A0DE571558C32BAC5F24980FC064DD074EB8CEA861A65AEE69DAB6FC399224E873990E1B71125EC60D49DEEE122204CAF6997B1992361135C8E0A6B0E1C2261DE156D839151B06D3F000035052E9A2CCC3033788996786CE0F0318532D0EE6EE805B9006E13D8EE4295596AFB500C39092ABB8D9D4216D; login=610100211001776408'}
-    url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId=610100211001776408&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
+def register(patient_info,doctor_info,date_time):
+    url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId={patientid}&clinicLabelId='.format(patientid=patient_info['Accountid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
     session = requests.Session()
     html = session.post(url).content
     print html
@@ -111,12 +110,16 @@ def hello(message, session):
     elif task[0].encode('utf-8') == '挂号':
         client = pymongo.MongoClient(host='172.17.76.183',port=27017)
         database = client.xachyy_DBS
-        col = database.doctor_info
-        doctor_name = col.find({'Name': task[1].encode('utf-8')})
+        col1 = database.doctor_info
+        col2 = database.Patient_info
+        doctor_name = col1.find({'Name': task[1].encode('utf-8')})
+        patient_name = col2.find({'session':message.source.encode('utf-8')})
         for each in doctor_name:
             doctor_info = each
+        for each in patient_name:
+            patient_info = each
         date_time = get_book_items(doctor_info)
-        back = register(doctor_info, date_time)
+        back = register(patient_info,doctor_info, date_time)
         return back
 
     else:
