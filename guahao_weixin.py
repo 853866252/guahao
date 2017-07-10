@@ -35,8 +35,9 @@ def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
     if a:
         print weixin_session
         print type(weixin_session)
-#        patient['session'] = weixin_session
+        patient['session'] = weixin_session.encode('utf-8')
         patient['Accoutid'] = a[0]
+        print patient
         col.insert(patient)
         return "登录成功"
     else:
