@@ -3,7 +3,9 @@
 import werobot
 from werobot import WeRoBot
 import requests
-robot = werobot.WeRoBot(token='ce1Jcs')
+from werobot.session.sqlitestorage import SQLiteStorage
+session_storage = SQLiteStorage
+robot = werobot.WeRoBot(token='ce1Jcs',enable_session=True,session_storage=session_storage)
 
 
 @robot.subscribe
@@ -16,6 +18,10 @@ def hello(message, session):
     datas = {}
     datas['key'] = '852a620fce214d28bb635e074ebb7fba'
     datas['info'] = message.content
+    id = message.source
+    session = session_storage[id]
+    print session
+#    datas['userid'] = session
     html = requests.post(url,data=datas).content
     return eval(html)['text']
 
