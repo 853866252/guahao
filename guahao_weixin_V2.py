@@ -103,8 +103,8 @@ def hello(message, session):
     col1 = database1.doctor_info
     col3 = database3.Transaction
     trans = col3.find_one({'Session':message.source.encode('utf-8')})
-    print trans
-    if trans['Task'] == None:
+    print type(trans)
+    if trans == None:
         task = message.content
         if "挂号" in task.encode('utf-8'):
             transaction_dict = {}
