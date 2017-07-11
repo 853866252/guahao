@@ -104,7 +104,8 @@ def hello(message, session):
 
     col3 = database3.Transaction
     trans = col3.find_one({'Session':message.source.encode('utf-8')})
-    if trans['Task'] != None :
+    print trans
+    if trans['Task']:
         news = message.content
         if news.encode('utf-8') == '3':
             col3.delete_one({'session': message.source.encode('utf-8')})
