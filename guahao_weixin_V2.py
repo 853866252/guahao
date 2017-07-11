@@ -131,14 +131,12 @@ def hello(message, session):
             if news.encode('utf-8') == '1':
                 col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
                 a = col3.find_one({'Session': message.source.encode('utf-8')})
-                return "您选择{hospital}，医生:{doctor},{time}抢号".format(hospital=a['Hospital'], doctor=a['Doctor'],
-                                                                   time=a['Time'])
+                return "您选择{hospital}，医生:{doctor},输入开始进行挂号".format(hospital=a['Hospital'], doctor=a['Doctor'])
             elif news.encode('utf-8') == '2':
                 col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
                 a = col3.find_one({'Session': message.source.encode('utf-8')})
 
-                return "您选择{hospital}，医生:{doctor},{time}抢号".format(hospital=a['Hospital'], doctor=a['Doctor'],
-                                                                   time=a['Time'])
+                return "您选择{hospital}，医生:{doctor},准备明天抢号".format(hospital=a['Hospital'], doctor=a['Doctor'])
             else:
                 return "请输入正确序号：1.现在\n2.明天抢号\n3.取消挂号"
         else:
