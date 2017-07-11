@@ -107,7 +107,7 @@ def hello(message, session):
     if trans != None:
         news = message.content
         if news.encode('utf-8') == '3':
-            col3.delete({'session': message.source.encode('utf-8')})
+            col3.delete_one({'Session': message.source.encode('utf-8')})
             return "已经取消挂号流程"
         if trans['Hospital'] == '':
             if news.encode('utf-8') == '1':
