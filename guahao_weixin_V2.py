@@ -103,38 +103,13 @@ def hello(message, session):
     col1 = database1.doctor_info
     col3 = database3.Transaction
     trans = col3.find_one({'Session':message.source.encode('utf-8')})
-    print type(trans)
-    if trans == None:
-        task = message.content
-        if "挂号" in task.encode('utf-8'):
-            transaction_dict = {}
-            transaction_dict['Session'] = message.source.encode('utf-8')
-            transaction_dict['Task'] = '1'
-            transaction_dict['Hospital'] = ''
-            transaction_dict['Doctor'] = ''
-            transaction_dict['Time'] = ''
-            transaction_dict['Pay'] = '1'
-            col3.insert(transaction_dict)
-            return "请输入您要就诊的医院编号：1.西京\n2.西安市儿童医院\n3.取消挂号"
-
-
-        else:
-            url = 'http://www.tuling123.com/openapi/api'
-            datas = {}
-            datas['key'] = '852a620fce214d28bb635e074ebb7fba'
-            datas['info'] = message.content
-            id = message.source
-            datas['userid'] = id
-            html = requests.post(url, data=datas).content
-            return eval(html)['text']
-
-    else:
+    print trans
+    if trans != None:
         news = message.content
         if news.encode('utf-8') == '3':
             col3.delete_one({'session': message.source.encode('utf-8')})
             return "已经取消挂号流程"
-        if trans['Hospital']:
-
+        if trans['Hospital'] == '':
             if news.encode('utf-8') == '1':
                 col3.update({'session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西京医院'}})
                 return "您选择西京医院，请输入医生姓名："
@@ -143,14 +118,14 @@ def hello(message, session):
                 return "您选择儿童医院，请输入医生姓名："
             else:
                 return "请重新输入序号：1.西京\n2.西安市儿童医院\n3.取消挂号"
-        elif trans['Doctor']:
+        elif trans['Doctor'] == '':
             if col1.find_one({'Name': message.content.encode('utf-8')}):
                 return "没有找到该医生，请重新输入医生姓名："
             else:
                 col3.update({'session': message.source.encode('utf-8')},
                             {'$set': {'Doctor': message.content.encode('utf-8')}})
                 return "您选择医生：{}，请输入挂号时间：1.现在\n2.明天抢号\n3.取消挂号".format(message.content.encode('utf-8'))
-        elif trans['Time']:
+        elif trans['Time'] == '':
             news = message.content
             if news.encode('utf-8') == '1':
                 col3.update({'session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
@@ -164,6 +139,28 @@ def hello(message, session):
                                                                    time=a['Time'])
             else:
                 return "请输入正确序号：1.现在\n2.明天抢号\n3.取消挂号"
+
+    else:
+        task = message.content
+        if "挂号" in task.encode('utf-8'):
+            transaction_dict = {}
+            transaction_dict['Session'] = message.source.encode('utf-8')
+            transaction_dict['Task'] = '1'
+            transaction_dict['Hospital'] = ''
+            transaction_dict['Doctor'] = ''
+            transaction_dict['Time'] = ''
+            transaction_dict['Pay'] = '1'
+            col3.insert(transaction_dict)
+            return "请输入您要就诊的医院编号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
+        else:
+            url = 'http://www.tuling123.com/openapi/api'
+            datas = {}
+            datas['key'] = '852a620fce214d28bb635e074ebb7fba'
+            datas['info'] = message.content
+            id = message.source
+            datas['userid'] = id
+            html = requests.post(url, data=datas).content
+            return eval(html)['text']
 
 
 
