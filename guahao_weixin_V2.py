@@ -111,10 +111,10 @@ def hello(message, session):
             return "已经取消挂号流程"
         if trans['Hospital'] == '':
             if news.encode('utf-8') == '1':
-                col3.update({'session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西京医院'}})
+                col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西京医院'}})
                 return "您选择西京医院，请输入医生姓名："
             elif news.encode('utf-8') == '2':
-                col3.update({'session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西安市儿童医院'}})
+                col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西安市儿童医院'}})
                 return "您选择儿童医院，请输入医生姓名："
             else:
                 return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
@@ -122,19 +122,19 @@ def hello(message, session):
             if col1.find_one({'Name': message.content.encode('utf-8')}):
                 return "没有找到该医生，请重新输入医生姓名："
             else:
-                col3.update({'session': message.source.encode('utf-8')},
+                col3.update({'Session': message.source.encode('utf-8')},
                             {'$set': {'Doctor': message.content.encode('utf-8')}})
                 return "您选择医生：{}，请输入挂号时间：\n1.现在\n2.明天抢号\n3.取消挂号".format(message.content.encode('utf-8'))
         elif trans['Time'] == '':
             news = message.content
             if news.encode('utf-8') == '1':
-                col3.update({'session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
-                a = col3.find_one({'session': message.source.encode('utf-8')})
+                col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
+                a = col3.find_one({'Session': message.source.encode('utf-8')})
                 return "您选择{hospital}，医生:{doctor},{time}抢号".format(hospital=a['Hospital'], doctor=a['Doctor'],
                                                                    time=a['Time'])
             elif news.encode('utf-8') == '2':
-                col3.update({'session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
-                a = col3.find_one({'session': message.source.encode('utf-8')})
+                col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
+                a = col3.find_one({'Session': message.source.encode('utf-8')})
                 return "您选择{hospital}，医生:{doctor},{time}抢号".format(hospital=a['Hospital'], doctor=a['Doctor'],
                                                                    time=a['Time'])
             else:
