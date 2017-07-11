@@ -107,7 +107,7 @@ def hello(message, session):
     if trans != None:
         news = message.content
         if news.encode('utf-8') == '3':
-            col3.delete_one({'session': message.source.encode('utf-8')})
+            col3.delete({'session': message.source.encode('utf-8')})
             return "已经取消挂号流程"
         if trans['Hospital'] == '':
             if news.encode('utf-8') == '1':
@@ -117,14 +117,14 @@ def hello(message, session):
                 col3.update({'session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西安市儿童医院'}})
                 return "您选择儿童医院，请输入医生姓名："
             else:
-                return "请重新输入序号：1.西京\n2.西安市儿童医院\n3.取消挂号"
+                return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
         elif trans['Doctor'] == '':
             if col1.find_one({'Name': message.content.encode('utf-8')}):
                 return "没有找到该医生，请重新输入医生姓名："
             else:
                 col3.update({'session': message.source.encode('utf-8')},
                             {'$set': {'Doctor': message.content.encode('utf-8')}})
-                return "您选择医生：{}，请输入挂号时间：1.现在\n2.明天抢号\n3.取消挂号".format(message.content.encode('utf-8'))
+                return "您选择医生：{}，请输入挂号时间：\n1.现在\n2.明天抢号\n3.取消挂号".format(message.content.encode('utf-8'))
         elif trans['Time'] == '':
             news = message.content
             if news.encode('utf-8') == '1':
