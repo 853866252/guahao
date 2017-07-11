@@ -119,7 +119,8 @@ def hello(message, session):
             else:
                 return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
         elif trans['Doctor'] == '':
-            if col1.find_one({'Name': message.content.encode('utf-8')}):
+            print col1.find_one({'Name': message.content.encode('utf-8')})
+            if col1.find_one({'Name': message.content.encode('utf-8')}) == None:
                 return "没有找到该医生，请重新输入医生姓名："
             else:
                 col3.update({'Session': message.source.encode('utf-8')},
