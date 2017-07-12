@@ -35,9 +35,6 @@ def get_verify():
     return session_id,code_id
 
 def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
-    client = pymongo.MongoClient(host='172.17.76.183',port=27017)
-    database2 = client.Patient
-    col2 = database2.Patient_info
     patient = {}
     i = 'ASP.NET_SessionId={session}; HBHOSPITALCODE={code}'.format(session=session_id,code=code_id)
     cookie = {'Cookie': i}
@@ -54,7 +51,7 @@ def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
         patient['Session'] = weixin_session.encode('utf-8')
         patient['Accoutid'] = a[0]
         print patient
-        col2.insert(patient)
+        col3.insert(patient)
         return "登录成功"
     else:
         return "登录用户名或密码错误，请重新输入"
