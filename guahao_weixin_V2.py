@@ -38,33 +38,25 @@ def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
     patient = {}
     i = 'ASP.NET_SessionId={session}; HBHOSPITALCODE={code}'.format(session=session_id,code=code_id)
     cookie = {'Cookie': i}
-    print cookie
     url = 'http://book.xachyy.com/passport/SsoLogin.aspx?user={user}&pwd={pwd}&app=0&loginType=2-1&hospitalId=61010021&verifycode={code}'.format(user=indentify_id,pwd=password,code=code_id)
-    print url
     opener = urllib2.build_opener()
     opener.addheaders.append(('Cookie',i))
     f = opener.open(url)
     a = re.findall('"Accountid":"(.*)","Accountname', f.read())
     if a:
-        print weixin_session
-        print type(weixin_session)
         patient['Session'] = weixin_session.encode('utf-8')
         patient['Accoutid'] = a[0]
-        print patient
         col3.insert(patient)
         return "登录成功"
     else:
         return "登录用户名或密码错误，请重新输入"
 
 def get_book_time(html):
-#    print html
     date_time = {}
     dt_time = lxml.html.document_fromstring(html)
     doctor_date = dt_time.xpath('//img/@onclick')
-#    print doctor_date[0]
     for each in doctor_date:
         time = each.split('\',\'')
-#        print time
         date_time['Date'] = time[1]
         date_time['Time'] = time[3]
         break
@@ -76,18 +68,13 @@ def get_book_items(doctor_info):
     date2 = str(datetime.date.today().replace(day=1) - datetime.timedelta(-31))
     datelist = [date1,date2]
     date_time = {}
-#    print doctor_info['ClinicLabelId'].encode("utf-8")
     for each in datelist:
-        #doctor_info['ClinicLabelId']encode("utf-8")
         url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
         html = get_source(url)
         date_time = get_book_time(html)
         if date_time != {}:
             break
-    if date_time == {}:
-        print "not start"
-    else:
-        return date_time
+    return date_time
 
 
 def register(patient_info,doctor_info,date_time):
@@ -98,14 +85,15 @@ def register(patient_info,doctor_info,date_time):
 
 def get_verify_register(session):
     if col3.find_one({'Session': session}) == None:
-        return "请按照如下格式进行登录验证，（登录/用户名/密码），仅需一次"
+        return "请按照如下格式进行登录验证，（登录/用户名/密码），此登录仅需一次,若没有账号请先到官网注册"
     else:
         task = col1.find_one({'Session': session})
-        print task
         if task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西安市儿童医院':
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session})
             date_time = get_book_items(doctor_info)
+            if date_time == {}:
+                return "没有开始或者已经预定完，请选择明天抢号"
             back = register(patientinfo, doctor_info, date_time)
             col1.delete_one({'Session': session})
             return back
@@ -125,7 +113,6 @@ def intro(message):
 def hello(message, session):
 
     trans = col1.find_one({'Session':message.source.encode('utf-8')})
-    print trans
     if trans != None:
         news = message.content
         task = news.split('/')
@@ -148,7 +135,7 @@ def hello(message, session):
             else:
                 return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
         elif trans['Doctor'] == '':
-            print col2.find_one({'Name': message.content.encode('utf-8')})
+
             if col2.find_one({'Name': message.content.encode('utf-8')}) == None:
                 return "没有找到该医生，请重新输入医生姓名："
             else:
@@ -197,71 +184,8 @@ def hello(message, session):
             return eval(html)['text']
 
 
-
-
-
-
-
-
-
-
-
-            #        task = message.content
-#        task = task.split('/')
-#    print task
-#    type(task[0])
-#        if task[0].encode('utf-8') == '登录':
-#        session_id, code_id = get_verify()
-#        identify_id = task[1].encode('utf-8')
-#        password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
-#        back = get_patientId(message.source,session_id, code_id, identify_id, password)
-#        return back
-#
-#    elif task[0].encode('utf-8') == '挂号':
-#        client = pymongo.MongoClient(host='172.17.76.183',port=27017)
-#        database1 = client.xachyy_DBS
-#        database2 = client.Patient
-#        col1 = database1.doctor_info
-#        col2 = database2.Patient_info
-#
-#        a = message.source.encode('utf-8')
-#        print a
-#        doctor_name = col1.find({'Name': task[1].encode('utf-8')})
-#        for each in doctor_name:
-#            doctor_info = each
-#        patient_name = col2.find({'session':message.source.encode('utf-8')})
-#        for each in patient_name:
-#            patientinfo = each
-#        date_time = get_book_items(doctor_info)
-#        back = register(patientinfo,doctor_info, date_time)
-#        return back
-#
-#    else:
-#        url = 'http://www.tuling123.com/openapi/api'
-#        datas = {}
-#        datas['key'] = '852a620fce214d28bb635e074ebb7fba'
-#        datas['info'] = message.content
-#        id = message.source
-#        datas['userid'] = id
-#        html = requests.post(url,data=datas).content
-#        return eval(html)['text']
-
- #   if message == '1':
-#        return
-#    print session
-#    print message
-#    count = session.get("count", 0) + 1
-#    print session
-#    session["count"] = count
-#    return "Hello! You have sent %s messages to me" % count
-
-
-
 robot.config['HOST'] = '172.17.76.183'
 robot.config['PORT'] = 80
 
-#robot.config["APP_ID"] = "你的 AppID"
-#robot.config["APP_SECRET"] = "你的 AppSecret"
-#client = robot.client
 
 robot.run()
