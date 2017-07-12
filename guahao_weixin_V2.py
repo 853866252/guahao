@@ -13,6 +13,14 @@ import lxml.html
 import datetime
 robot = werobot.WeRoBot(token='ce1Jcs')
 
+client = pymongo.MongoClient(host='172.17.76.183', port=27017)
+database1 = client.Register
+database2 = client.xachyy_DBS
+col1 = database1.Transaction
+col2 = database2.doctor_info
+col3 = database1.Patient_info
+col4 = database1.Transaction_plan
+
 def get_source(url):
     session = requests.session()
     source = session.get(url).content
@@ -43,7 +51,7 @@ def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
     if a:
         print weixin_session
         print type(weixin_session)
-        patient['session'] = weixin_session.encode('utf-8')
+        patient['Session'] = weixin_session.encode('utf-8')
         patient['Accoutid'] = a[0]
         print patient
         col2.insert(patient)
@@ -91,57 +99,107 @@ def register(patient_info,doctor_info,date_time):
     html = session.post(url).content
     return html
 
+def get_verify_register(session):
+    if col3.find_one({'Session': session}) == None:
+        return "请按照如下格式进行登录验证，（登录/用户名/密码），仅需一次"
+    else:
+        task = col1.find_one({'Session': session})
+        if task['Time'] == '现在' and task['Hospital'] == '西安市儿童医院':
+            doctor_info = col2.find_one({'Name': task['Doctor']})
+            patientinfo = col3.find_one({'Session': session})
+            date_time = get_book_items(doctor_info)
+            back = register(patientinfo, doctor_info, date_time)
+            col1.delete_one({'Session': session})
+            return back
+        elif task['Time'] == '现在' and task['Hospital'] == '西京':
+            pass
+        else:
+            col4.insert(task)
+            col1.delete_one({'Session': session})
+            return "已经准备明天为您抢号，请耐心等待"
+
+
+
+
+
+
+
+# client = pymongo.MongoClient(host='172.17.76.183',port=27017)
+#        database1 = client.xachyy_DBS
+#        database2 = client.Patient
+#        col1 = database1.doctor_info
+#        col2 = database2.Patient_info
+#
+#        a = message.source.encode('utf-8')
+#        print a
+#        doctor_name = col1.find({'Name': task[1].encode('utf-8')})
+#        for each in doctor_name:
+#            doctor_info = each
+#        patient_name = col2.find({'session':message.source.encode('utf-8')})
+#        for each in patient_name:
+#            patientinfo = each
+#        date_time = get_book_items(doctor_info)
+#        back = register(patientinfo,doctor_info, date_time)
+#        return back
+
+
+
 @robot.subscribe
 def intro(message):
     return "欢迎来到任式机器，目前提供自动预定挂号及抢号服务。\n挂号分为两个步骤：\n1）输入：登录/用户名/密码（仅需一次）\n2）输入：挂号/医生名称/现在或抢号"
 
 @robot.text
 def hello(message, session):
-    client = pymongo.MongoClient(host='172.17.76.183',port=27017)
-    database1 = client.xachyy_DBS
-    database3 = client.Transaction
-    col1 = database1.doctor_info
-    col3 = database3.Transaction
-    trans = col3.find_one({'Session':message.source.encode('utf-8')})
+
+    trans = col1.find_one({'Session':message.source.encode('utf-8')})
     print trans
     if trans != None:
         news = message.content
+        task = news.split('/')
+        if task[0].encode('utf-8') == '登录':
+            session_id, code_id = get_verify()
+            identify_id = task[1].encode('utf-8')
+            password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
+            back = get_patientId(message.source,session_id, code_id, identify_id, password)
+            return back+"\n请输入确定，完成任务下达"
         if news.encode('utf-8') == '3':
-            col3.delete_one({'Session': message.source.encode('utf-8')})
+            col1.delete_one({'Session': message.source.encode('utf-8')})
             return "已经取消挂号流程"
         if trans['Hospital'] == '':
             if news.encode('utf-8') == '1':
-                col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西京医院'}})
+                col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西京医院'}})
                 return "您选择西京医院，请输入医生姓名："
             elif news.encode('utf-8') == '2':
-                col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西安市儿童医院'}})
+                col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西安市儿童医院'}})
                 return "您选择儿童医院，请输入医生姓名："
             else:
                 return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
         elif trans['Doctor'] == '':
-            print col1.find_one({'Name': message.content.encode('utf-8')})
-            if col1.find_one({'Name': message.content.encode('utf-8')}) == None:
+            print col2.find_one({'Name': message.content.encode('utf-8')})
+            if col2.find_one({'Name': message.content.encode('utf-8')}) == None:
                 return "没有找到该医生，请重新输入医生姓名："
             else:
-                col3.update({'Session': message.source.encode('utf-8')},
+                col1.update({'Session': message.source.encode('utf-8')},
                             {'$set': {'Doctor': message.content.encode('utf-8')}})
                 return "您选择医生：{}，请输入挂号时间：\n1.现在\n2.明天抢号\n3.取消挂号".format(message.content.encode('utf-8'))
         elif trans['Time'] == '':
             news = message.content
             if news.encode('utf-8') == '1':
-                col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
-                a = col3.find_one({'Session': message.source.encode('utf-8')})
-                return "您选择{hospital}，医生:{doctor},输入开始进行挂号".format(hospital=a['Hospital'].encode('utf-8'), doctor=a['Doctor'].encode('utf-8'))
-            elif news.encode('utf-8') == '2':
-                col3.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
-                a = col3.find_one({'Session': message.source.encode('utf-8')})
+                col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
+                back_message = get_verify_register(message.source.encode('utf-8'))
+                return back_message
 
-                return "您选择{hospital}，医生:{doctor},准备明天抢号".format(hospital=a['Hospital'].encode('utf-8'), doctor=a['Doctor'].encode('utf-8'))
+            elif news.encode('utf-8') == '2':
+                col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
+                back_message = get_verify_register(message.source.encode('utf-8'))
+                return back_message
+
             else:
                 return "请输入正确序号：1.现在\n2.明天抢号\n3.取消挂号"
         else:
 
-            return "输入不正确，请重新输入"
+            back_message = get_verify_register(message.source.encode('utf-8'))
+            return back_message
 
     else:
         task = message.content
@@ -153,7 +211,7 @@ def hello(message, session):
             transaction_dict['Doctor'] = ''
             transaction_dict['Time'] = ''
             transaction_dict['Pay'] = '1'
-            col3.insert(transaction_dict)
+            col1.insert(transaction_dict)
             return "请输入您要就诊的医院编号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
         else:
             url = 'http://www.tuling123.com/openapi/api'
@@ -179,7 +237,7 @@ def hello(message, session):
 #        task = task.split('/')
 #    print task
 #    type(task[0])
-#    if task[0].encode('utf-8') == '登录':
+#        if task[0].encode('utf-8') == '登录':
 #        session_id, code_id = get_verify()
 #        identify_id = task[1].encode('utf-8')
 #        password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
