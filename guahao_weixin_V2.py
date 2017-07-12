@@ -102,14 +102,14 @@ def get_verify_register(session):
     else:
         task = col1.find_one({'Session': session})
         print task
-        if task['Time'] == '现在' and task['Hospital'] == '西安市儿童医院':
+        if task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西安市儿童医院':
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session})
             date_time = get_book_items(doctor_info)
             back = register(patientinfo, doctor_info, date_time)
             col1.delete_one({'Session': session})
             return back
-        elif task['Time'] == '现在' and task['Hospital'] == '西京':
+        elif task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西京':
             pass
         else:
             col4.insert(task)
