@@ -117,34 +117,9 @@ def get_verify_register(session):
             return "已经准备明天为您抢号，请耐心等待"
 
 
-
-
-
-
-
-# client = pymongo.MongoClient(host='172.17.76.183',port=27017)
-#        database1 = client.xachyy_DBS
-#        database2 = client.Patient
-#        col1 = database1.doctor_info
-#        col2 = database2.Patient_info
-#
-#        a = message.source.encode('utf-8')
-#        print a
-#        doctor_name = col1.find({'Name': task[1].encode('utf-8')})
-#        for each in doctor_name:
-#            doctor_info = each
-#        patient_name = col2.find({'session':message.source.encode('utf-8')})
-#        for each in patient_name:
-#            patientinfo = each
-#        date_time = get_book_items(doctor_info)
-#        back = register(patientinfo,doctor_info, date_time)
-#        return back
-
-
-
 @robot.subscribe
 def intro(message):
-    return "欢迎来到任式机器，目前提供自动预定挂号及抢号服务。\n挂号分为两个步骤：\n1）输入：登录/用户名/密码（仅需一次）\n2）输入：挂号/医生名称/现在或抢号"
+    return "欢迎来到任式机器，公众号提供自动预定挂号及抢号服务。预想挂号请输入：挂号（目前仅支持西安市儿童医院）"
 
 @robot.text
 def hello(message, session):
