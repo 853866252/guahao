@@ -101,6 +101,7 @@ def get_verify_register(session):
         return "请按照如下格式进行登录验证，（登录/用户名/密码），仅需一次"
     else:
         task = col1.find_one({'Session': session})
+        print task
         if task['Time'] == '现在' and task['Hospital'] == '西安市儿童医院':
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session})
