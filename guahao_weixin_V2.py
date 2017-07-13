@@ -169,10 +169,12 @@ def hello(message, session):
             return back_message
 
     elif message.content.encode('utf-8')=='查看':
-
+        b = []
         for each in col4.find({'Session': message.source.encode('utf-8')}):
-            print each
-        
+            group = each['Hospital'].encode('utf-8')+each['Doctor'].encode('utf-8')
+            b.append(group)
+        return b
+
     else:
         task = message.content
         if "挂号" in task.encode('utf-8'):
