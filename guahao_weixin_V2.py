@@ -95,9 +95,8 @@ def get_verify_register(session):
             print date_time
             print type(date_time)
             if date_time == {}:
-                col4.insert(task)
                 col1.delete_one({'Session': session})
-                a = "没有开始或者已经预定完,已经为您安排明天抢号"
+                a = "没有开始或者已经预定完,请重新定义明天抢号"
                 return a
             back = register(patientinfo, doctor_info, date_time)
             col1.delete_one({'Session': session})
@@ -105,6 +104,7 @@ def get_verify_register(session):
         elif task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西京':
             pass
         else:
+            
             col4.insert(task)
             col1.delete_one({'Session': session})
             return "已经准备明天为您抢号，请耐心等待"
