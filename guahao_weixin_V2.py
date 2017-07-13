@@ -96,7 +96,7 @@ def get_verify_register(session):
             print type(date_time)
             if date_time == {}:
                 col4.insert(task)
-
+                col1.delete_one({'Session': session})
                 return "没有开始或者已经预定完,已经为您转为明日抢号，请耐心等待。"
             back = register(patientinfo, doctor_info, date_time)
             col1.delete_one({'Session': session})
@@ -117,7 +117,8 @@ def intro(message):
 def hello(message, session):
 
     trans = col1.find_one({'Session':message.source.encode('utf-8')})
-    if trans != None:
+    trans1 = col4.find_one({'Session': message.source.encode('utf-8')})
+    if trans != None and trans1 != None:
         news = message.content
         task = news.split('/')
         if task[0].encode('utf-8') == '登录':
