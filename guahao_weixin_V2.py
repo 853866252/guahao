@@ -94,8 +94,9 @@ def get_verify_register(session):
             date_time = get_book_items(doctor_info)
             print date_time
             print type(date_time)
-            if date_time == {}:
-                return "没有开始或者已经预定完，请选择明天抢号"
+#            if date_time == {}:
+
+#                return "没有开始或者已经预定完"
             back = register(patientinfo, doctor_info, date_time)
             col1.delete_one({'Session': session})
             return back
