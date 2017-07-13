@@ -92,6 +92,7 @@ def get_verify_register(session):
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session})
             date_time = get_book_items(doctor_info)
+            print date_time
             if date_time == {}:
                 return "没有开始或者已经预定完，请选择明天抢号"
             back = register(patientinfo, doctor_info, date_time)
