@@ -97,7 +97,7 @@ def get_verify_register(session):
             if date_time == {}:
                 col4.insert(task)
                 col1.delete_one({'Session': session})
-                a = "没有开始或者已经预定完,已经为您安排明天抢号\n查看抢号预约列表请输入：查看预约"
+                a = "没有开始或者已经预定完,已经为您安排明天抢号"
                 return a
             back = register(patientinfo, doctor_info, date_time)
             col1.delete_one({'Session': session})
