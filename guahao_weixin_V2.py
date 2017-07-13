@@ -118,7 +118,7 @@ def hello(message, session):
 
     trans = col1.find_one({'Session':message.source.encode('utf-8')})
     trans1 = col4.find_one({'Session': message.source.encode('utf-8')})
-    if trans != None and trans1 != None:
+    if trans != None or trans1 != None:
         news = message.content
         task = news.split('/')
         if task[0].encode('utf-8') == '登录':
