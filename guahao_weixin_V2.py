@@ -118,6 +118,8 @@ def hello(message, session):
 
     trans = col1.find_one({'Session':message.source.encode('utf-8')})
     trans1 = col4.find_one({'Session': message.source.encode('utf-8')})
+    print trans
+    print trans1
     if trans != None or trans1 != None:
         news = message.content
         task = news.split('/')
