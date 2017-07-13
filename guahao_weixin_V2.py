@@ -97,7 +97,7 @@ def get_verify_register(session):
             if date_time == {}:
                 col4.insert(task)
                 col1.delete_one({'Session': session})
-                a = "没有开始或者已经预定完,已经为您安排明天抢号，查看抢号预约列表请输入：查看"
+                a = "没有开始或者已经预定完,已经为您安排明天抢号，查看抢号预约列表请输入：查看预约"
                 return a
             back = register(patientinfo, doctor_info, date_time)
             col1.delete_one({'Session': session})
@@ -114,13 +114,7 @@ def get_verify_register(session):
 def intro(message):
     return "欢迎来到任式机器，公众号提供自动预定挂号及抢号服务。预想挂号请输入：挂号（目前仅支持西安市儿童医院）"
 
-@robot.filter(re.compile(".*?查看预约.*?"))
-def b(message, session):
-    b = []
-    for each in col4.find({'Session': message.source.encode('utf-8')}):
-        group = each['Hospital'].encode('utf-8') + ':' + each['Doctor'].encode('utf-8')
-        b.append(group)
-    return '\n'.join(b)
+
 
 @robot.text
 def hello(message, session):
@@ -175,14 +169,12 @@ def hello(message, session):
 
             back_message = get_verify_register(message.source.encode('utf-8'))
             return back_message
-
-#    elif message.content.encode('utf-8')=='查看':
-#        b = []
-#        for each in col4.find({'Session': message.source.encode('utf-8')}):
-#            group = each['Hospital'].encode('utf-8')+':'+each['Doctor'].encode('utf-8')
-#            b.append(group)
-#
-#        return '\n'.join(b)
+    elif '查看预约' in message.content.encode('utf-8'):
+        b = []
+        for each in col4.find({'Session': message.source.encode('utf-8')}):
+            group = each['Hospital'].encode('utf-8')+':'+each['Doctor'].encode('utf-8')
+            b.append(group)
+        return '\n'.join(b)
 
     else:
         task = message.content
