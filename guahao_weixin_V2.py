@@ -173,6 +173,7 @@ def hello(message, session):
         for each in col4.find({'Session': message.source.encode('utf-8')}):
             group = each['Hospital'].encode('utf-8')+each['Doctor'].encode('utf-8')
             b.append(group)
+            print b
         return b
 
     else:
