@@ -94,9 +94,10 @@ def get_verify_register(session):
             date_time = get_book_items(doctor_info)
             print date_time
             print type(date_time)
-#            if date_time == {}:
-
-#                return "没有开始或者已经预定完"
+            if date_time:
+                col4.insert(task)
+                col1.delete_one({'Session': session})
+                return "没有开始或者已经预定完,已经为您转为明日抢号，取消请输入3"
             back = register(patientinfo, doctor_info, date_time)
             col1.delete_one({'Session': session})
             return back
@@ -127,6 +128,7 @@ def hello(message, session):
             return back+"\n请输入确定，完成任务下达"
         if news.encode('utf-8') == '3':
             col1.delete_one({'Session': message.source.encode('utf-8')})
+            col4.delete_one({'Session': message.source.encode('utf-8')})
             return "已经取消挂号流程"
         if trans['Hospital'] == '':
             if news.encode('utf-8') == '1':
