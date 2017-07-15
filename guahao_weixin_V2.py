@@ -72,7 +72,7 @@ def get_book_items(doctor_info):
         url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
         html = get_source(url)
         date_time = get_book_time(html)
-        if date_time != {}:
+        if date_time != {{'start':1}}:
             break
     return date_time
 
