@@ -67,7 +67,7 @@ def get_book_items(doctor_info):
     date1 = str(datetime.date.today().replace(day=1))
     date2 = str(datetime.date.today().replace(day=1) - datetime.timedelta(-31))
     datelist = [date1,date2]
-    date_time = {}
+    date_time = {'start':1}
     for each in datelist:
         url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
         html = get_source(url)
@@ -94,7 +94,7 @@ def get_verify_register(session):
             date_time = get_book_items(doctor_info)
             print date_time
             print type(date_time)
-            if date_time == {}:
+            if date_time == {'start':1}:
 #                col1.delete_one({'Session': session})
                 print '1'
                 return "没有开始或者已经预定完"
