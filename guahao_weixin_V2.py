@@ -96,8 +96,8 @@ def get_verify_register(session):
             print type(date_time)
             if date_time == {}:
 #                col1.delete_one({'Session': session})
-                a = "没有开始或者已经预定完"
-                return a
+                print '1'
+                return "没有开始或者已经预定完"
             else:
                 back = register(patientinfo, doctor_info, date_time)
                 col1.delete_one({'Session': session})
