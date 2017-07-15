@@ -157,6 +157,8 @@ def hello(message, session):
             if news.encode('utf-8') == '1':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
                 back_message = get_verify_register(message.source.encode('utf-8'))
+                print '2'
+                print back_message
                 return back_message
 
             elif news.encode('utf-8') == '2':
@@ -169,6 +171,8 @@ def hello(message, session):
         else:
 
             back_message = get_verify_register(message.source.encode('utf-8'))
+            print '3'
+            print back_message
             return back_message
     elif '查看预约' in message.content.encode('utf-8'):
         b = []
