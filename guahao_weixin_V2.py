@@ -43,6 +43,7 @@ def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
     opener.addheaders.append(('Cookie',i))
     f = opener.open(url)
     a = re.findall('"Accountid":"(.*)","Accountname', f.read())
+
     if a:
         patient['Session'] = weixin_session.encode('utf-8')
         patient['Accoutid'] = a[0]
@@ -111,6 +112,8 @@ def get_verify_register(session):
             return "已经准备明天为您抢号，请耐心等待"
 
 
+
+
 @robot.subscribe
 def intro(message):
     return "欢迎来到任式机器，公众号提供自动预定挂号及抢号服务。预想挂号请输入：挂号（目前仅支持西安市儿童医院）"
@@ -138,9 +141,11 @@ def hello(message, session):
         if trans['Hospital'] == '':
             if news.encode('utf-8') == '1':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西京医院'}})
+                col1.insert({'Session': message.source.encode('utf-8')}, {'$set': {'Url': 'http://www.83215321.com'}})
                 return "您选择西京医院，请输入医生姓名："
             elif news.encode('utf-8') == '2':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西安市儿童医院'}})
+                col1.insert({'Session': message.source.encode('utf-8')}, {'$set': {'Url': 'http://book.xachyy.comm'}})
                 return "您选择儿童医院，请输入医生姓名："
             else:
                 return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
