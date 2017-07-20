@@ -26,8 +26,8 @@ def get_source(url):
     source = session.get(url).content
     return source.decode('utf-8')
 
-def get_verify():
-    url = 'http://book.xachyy.com/modules/verifyImage.ashx'
+def get_verify(hospital_url):
+    url = 'http://{URL}/modules/verifyImage.ashx'.format(URL=hospital_url)
     session = requests.session()
     response_headers = session.get(url).headers
     session_id = ''.join(re.findall('ASP.NET_SessionId=(.*); path=/;',response_headers['Set-Cookie']))
@@ -131,10 +131,10 @@ def hello(message, session):
         news = message.content
         task = news.split('/')
         if task[0].encode('utf-8') == '登录':
-            session_id, code_id = get_verify()
+            hospital_url = trans['Url']
+            session_id, code_id = get_verify(hospital_url)
             identify_id = task[1].encode('utf-8')
             password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
-            hospital_url = trans['Url']
             back = get_patientId(message.source,session_id, code_id, identify_id, password,hospital_url)
             return back+"\n请输入确定，完成任务下达"
         if news.encode('utf-8') == '3':
