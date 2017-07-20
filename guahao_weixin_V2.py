@@ -34,19 +34,21 @@ def get_verify():
     code_id = ''.join(re.findall('HBHOSPITALCODE=(\d\d\d\d)',response_headers['Set-Cookie']))
     return session_id,code_id
 
-def get_patientId(weixin_session,session_id,code_id,indentify_id,password):
+def get_patientId(weixin_session,session_id,code_id,indentify_id,password,hospital_url):
     patient = {}
     i = 'ASP.NET_SessionId={session}; HBHOSPITALCODE={code}'.format(session=session_id,code=code_id)
-    cookie = {'Cookie': i}
-    url = 'http://book.xachyy.com/passport/SsoLogin.aspx?user={user}&pwd={pwd}&app=0&loginType=2-1&hospitalId=61010021&verifycode={code}'.format(user=indentify_id,pwd=password,code=code_id)
+    login_url = 'http://{URL}/passport/SsoLogin.aspx?user={user}&pwd={pwd}&app=0&loginType=2-1&hospitalId=61010021&verifycode={code}'.format(URL=hospital_url,user=indentify_id,pwd=password,code=code_id)
     opener = urllib2.build_opener()
-    opener.addheaders.append(('Cookie',i))
-    f = opener.open(url)
+    if hospital_url == 'book.xachyy.com':
+        opener.addheaders.append(('Cookie',i))
+
+    f = opener.open(login_url)
     a = re.findall('"Accountid":"(.*)","Accountname', f.read())
 
     if a:
         patient['Session'] = weixin_session.encode('utf-8')
         patient['Accoutid'] = a[0]
+        patient['Url'] = hospital_url
         col3.insert(patient)
         return "登录成功"
     else:
@@ -132,7 +134,8 @@ def hello(message, session):
             session_id, code_id = get_verify()
             identify_id = task[1].encode('utf-8')
             password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
-            back = get_patientId(message.source,session_id, code_id, identify_id, password)
+            hospital_url = trans['Url']
+            back = get_patientId(message.source,session_id, code_id, identify_id, password,hospital_url)
             return back+"\n请输入确定，完成任务下达"
         if news.encode('utf-8') == '3':
             col1.delete_one({'Session': message.source.encode('utf-8')})
@@ -145,8 +148,8 @@ def hello(message, session):
                 return "您选择西京医院，请输入医生姓名："
             elif news.encode('utf-8') == '2':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西安市儿童医院'}})
-                col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Url': 'book.xachyy.comm'}})
-                return "您选择儿童医院，请输入医生姓名："
+                col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Url': 'book.xachyy.com'}})
+                return "您选择西安市儿童医院，请输入医生姓名："
             else:
                 return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
         elif trans['Doctor'] == '':
