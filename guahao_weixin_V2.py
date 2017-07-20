@@ -37,10 +37,10 @@ def get_verify(hospital_url):
 def get_patientId(weixin_session,session_id,code_id,indentify_id,password,hospital_url):
     patient = {}
     i = 'ASP.NET_SessionId={session}; HBHOSPITALCODE={code}'.format(session=session_id,code=code_id)
-    login_url = 'http://{URL}/passport/SsoLogin.aspx?user={user}&pwd={pwd}&app=0&loginType=2-1&hospitalId=61010021&verifycode={code}'.format(URL=hospital_url,user=indentify_id,pwd=password,code=code_id)
+    login_url = 'http://{URL}/passport/SsoLogin.aspx?user={user}&pwd={pwd}&app=0&loginType=2-1&hospitalId=&verifycode={code}'.format(URL=hospital_url,user=indentify_id,pwd=password,code=code_id)
     opener = urllib2.build_opener()
-    if hospital_url == 'book.xachyy.com':
-        opener.addheaders.append(('Cookie',i))
+
+    opener.addheaders.append(('Cookie',i))
 
     f = opener.open(login_url)
     a = re.findall('"Accountid":"(.*)","Accountname', f.read())
