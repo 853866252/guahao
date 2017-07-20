@@ -141,11 +141,11 @@ def hello(message, session):
         if trans['Hospital'] == '':
             if news.encode('utf-8') == '1':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西京医院'}})
-                col1.insert({'Session': message.source.encode('utf-8')}, {'$set': {'Url': 'http://www.83215321.com'}})
+                col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Url': 'www.83215321.com'}})
                 return "您选择西京医院，请输入医生姓名："
             elif news.encode('utf-8') == '2':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Hospital': '西安市儿童医院'}})
-                col1.insert({'Session': message.source.encode('utf-8')}, {'$set': {'Url': 'http://book.xachyy.comm'}})
+                col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Url': 'book.xachyy.comm'}})
                 return "您选择儿童医院，请输入医生姓名："
             else:
                 return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
@@ -193,6 +193,7 @@ def hello(message, session):
             transaction_dict['Session'] = message.source.encode('utf-8')
             transaction_dict['Task'] = '1'
             transaction_dict['Hospital'] = ''
+            transaction_dict['Url'] = ''
             transaction_dict['Doctor'] = ''
             transaction_dict['Time'] = ''
             transaction_dict['Pay'] = '1'
