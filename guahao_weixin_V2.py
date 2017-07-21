@@ -84,7 +84,7 @@ def get_patientId_xijing(weixin_session, indentify_id, password, hospital_url):
         f = opener.open(login_url)
         b = re.findall("login_state='(.*)'\;", f.read())
         print b
-        if b[0].encode('utf-8') == '验证码错误':
+        if b[0] == '\xe9\xaa\x8c\xe8\xaf\x81\xe7\xa0\x81\xe9\x94\x99\xe8\xaf\xaf' or b[0]=='error':
             continue
         else:
             a = re.findall('"Accountid":"(.*)","Accountname', f.read())
