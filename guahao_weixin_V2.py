@@ -82,8 +82,9 @@ def get_patientId_xijing(weixin_session, indentify_id, password, hospital_url):
         opener = urllib2.build_opener()
         opener.addheaders.append(('Cookie', i))
         f = opener.open(login_url)
-        print f.read()
-        if f.read() == "login_state='验证码错误';":
+        b = re.findall("login_state='(.*)'\;", f.read())
+        print b
+        if b == '验证码错误':
             continue
         else:
             a = re.findall('"Accountid":"(.*)","Accountname', f.read())
