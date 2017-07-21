@@ -3,6 +3,8 @@
 import werobot
 import sqlite3
 from werobot import WeRoBot
+import pytesseract
+from PIL import Image
 import hashlib
 import requests
 import re
@@ -26,22 +28,37 @@ def get_source(url):
     source = session.get(url).content
     return source.decode('utf-8')
 
-def get_verify(hospital_url):
+def get_verify_xachyy(hospital_url):
     url = 'http://{URL}/modules/verifyImage.ashx'.format(URL=hospital_url)
     session = requests.session()
     response_headers = session.get(url).headers
     session_id = ''.join(re.findall('ASP.NET_SessionId=(.*); path=/;',response_headers['Set-Cookie']))
     code_id = ''.join(re.findall('HBHOSPITALCODE=(\d\d\d\d)',response_headers['Set-Cookie']))
     return session_id,code_id
+def get_verify_xijing(hospital_url):
+    url = 'http://{URL}/modules/verifyImage.ashx'.format(URL=hospital_url)
+    session = requests.session()
+    response = session.get(url)
+    response_headers = response.headers
+    response_data = response.content
+    file = open('image.jpg', 'wb')
+    file.write(response_data)
+    file.close()
+    image = Image.open('image.jpg')
+    code = pytesseract.image_to_string(image)
 
-def get_patientId(weixin_session,session_id,code_id,indentify_id,password,hospital_url):
+    session_id = ''.join(re.findall('ASP.NET_SessionId=(.*); path=/;', response_headers['Set-Cookie']))
+    #    code_id = ''.join(re.findall('HBHOSPITALCODE=(\d\d\d\d)',response_headers['Set-Cookie']))
+    return session_id, code
+
+def get_patientId_xachyy(weixin_session,session_id,code_id,indentify_id,password,hospital_url):
+
+
     patient = {}
     i = 'ASP.NET_SessionId={session}; HBHOSPITALCODE={code}'.format(session=session_id,code=code_id)
     login_url = 'http://{URL}/passport/SsoLogin.aspx?user={user}&pwd={pwd}&app=0&loginType=2-1&hospitalId=&verifycode={code}'.format(URL=hospital_url,user=indentify_id,pwd=password,code=code_id)
     opener = urllib2.build_opener()
-
     opener.addheaders.append(('Cookie',i))
-
     f = opener.open(login_url)
     a = re.findall('"Accountid":"(.*)","Accountname', f.read())
 
@@ -53,6 +70,32 @@ def get_patientId(weixin_session,session_id,code_id,indentify_id,password,hospit
         return "登录成功"
     else:
         return "登录用户名或密码错误，请重新输入"
+
+
+def get_patientId_xijing(weixin_session, indentify_id, password, hospital_url):
+
+    patient = {}
+    while hospital_url:
+        session_id,code_id = get_verify_xijing(hospital_url)
+        i = 'ASP.NET_SessionId={session}; HBHOSPITALCODE={code}'.format(session=session_id, code=code_id)
+        login_url = 'http://{URL}/passport/SsoLogin.aspx?user={user}&pwd={pwd}&app=0&loginType=2-1&hospitalId=&verifycode={code}'.format(
+            URL=hospital_url, user=indentify_id, pwd=password, code=code_id)
+        opener = urllib2.build_opener()
+        opener.addheaders.append(('Cookie', i))
+        f = opener.open(login_url)
+        print f.read()
+        if f.read() == "login_state='验证码错误';":
+            continue
+        else:
+            a = re.findall('"Accountid":"(.*)","Accountname', f.read())
+            if a:
+                patient['Session'] = weixin_session.encode('utf-8')
+                patient['Accoutid'] = a[0]
+                patient['Url'] = hospital_url
+                col3.insert(patient)
+                return "登录成功"
+            else:
+                return "登录用户名或密码错误，请重新输入"
 
 def get_book_time(html):
     date_time = {}
@@ -132,11 +175,19 @@ def hello(message, session):
         task = news.split('/')
         if task[0].encode('utf-8') == '登录':
             hospital_url = trans['Url']
-            session_id, code_id = get_verify(hospital_url)
-            identify_id = task[1].encode('utf-8')
-            password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
-            back = get_patientId(message.source,session_id, code_id, identify_id, password,hospital_url)
-            return back+"\n请输入确定，完成任务下达"
+            if hospital_url == 'book.xachyy.com':
+                session_id, code_id = get_verify_xachyy(hospital_url)
+                identify_id = task[1].encode('utf-8')
+                password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
+                back = get_patientId_xachyy(message.source, session_id, code_id, identify_id, password, hospital_url)
+                return back + "\n请输入确定，完成任务下达"
+            elif hospital_url == 'www.83215321.com':
+                identify_id = task[1].encode('utf-8')
+                password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
+                back = get_patientId_xijing(message.source, identify_id, password, hospital_url)
+                return back + "\n请输入确定，完成任务下达"
+            else:
+                return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
         if news.encode('utf-8') == '3':
             col1.delete_one({'Session': message.source.encode('utf-8')})
             col4.delete_one({'Session': message.source.encode('utf-8')})
