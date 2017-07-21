@@ -46,7 +46,6 @@ def get_verify_xijing(hospital_url):
     file.close()
     image = Image.open('image.jpg')
     code = pytesseract.image_to_string(image)
-
     session_id = ''.join(re.findall('ASP.NET_SessionId=(.*); path=/;', response_headers['Set-Cookie']))
     #    code_id = ''.join(re.findall('HBHOSPITALCODE=(\d\d\d\d)',response_headers['Set-Cookie']))
     return session_id, code
