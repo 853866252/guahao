@@ -86,8 +86,11 @@ def get_patientId_xijing(weixin_session, indentify_id, password, hospital_url):
         b = re.findall("login_state='(.*)'\;", f.read())
         print b
         print type(b)
-        if b[0] == '验证码错误' or b[0]=='error':
+        if b[0] == '验证码错误':
             continue
+        elif b[0]=='error':
+            return "登录用户名或密码错误，请重新输入"
+
         else:
             a = re.findall('"Accountid":"(.*)","Accountname', b[0])
             print a
