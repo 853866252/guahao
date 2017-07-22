@@ -89,7 +89,8 @@ def get_patientId_xijing(weixin_session, indentify_id, password, hospital_url):
         if b[0] == '验证码错误' or b[0]=='error':
             continue
         else:
-            a = re.findall('"Accountid":"(.*)","Accountname', f.read())
+            a = re.findall('"Accountid":"(.*)","Accountname', f.read()[0])
+            print a
             if a:
                 patient['Session'] = weixin_session.encode('utf-8')
                 patient['Accoutid'] = a[0]
