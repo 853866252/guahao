@@ -136,6 +136,7 @@ def register(patient_info,doctor_info,date_time):
     return html
 
 def get_verify_register(session):
+
     if col3.find_one({'Session': session}) == None:
         return "请按照如下格式进行登录验证，（登录/用户名/密码），此登录仅需一次,若没有账号请先到官网注册"
     else:
@@ -163,6 +164,23 @@ def get_verify_register(session):
             return "已经准备明天为您抢号，请耐心等待"
 
 
+def sign_in(hospital_url,task,message):
+    if hospital_url == 'book.xachyy.com':
+        session_id, code_id = get_verify_xachyy(hospital_url)
+        identify_id = task[1].encode('utf-8')
+        password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
+        back = get_patientId_xachyy(message.source, session_id, code_id, identify_id, password, hospital_url)
+        return back + "\n请输入确定，完成任务下达"
+    elif hospital_url == 'www.83215321.com':
+        identify_id = task[1].encode('utf-8')
+        password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
+        back = get_patientId_xijing(message.source, identify_id, password, hospital_url)
+        return back + "\n请输入确定，完成任务下达"
+    else:
+        return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
+
+
+
 
 
 @robot.subscribe
@@ -181,19 +199,11 @@ def hello(message, session):
         task = news.split('/')
         if task[0].encode('utf-8') == '登录':
             hospital_url = trans['Url']
-            if hospital_url == 'book.xachyy.com':
-                session_id, code_id = get_verify_xachyy(hospital_url)
-                identify_id = task[1].encode('utf-8')
-                password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
-                back = get_patientId_xachyy(message.source, session_id, code_id, identify_id, password, hospital_url)
-                return back + "\n请输入确定，完成任务下达"
-            elif hospital_url == 'www.83215321.com':
-                identify_id = task[1].encode('utf-8')
-                password = hashlib.md5(task[2].encode('utf-8')).hexdigest()
-                back = get_patientId_xijing(message.source, identify_id, password, hospital_url)
-                return back + "\n请输入确定，完成任务下达"
+            if col3.find_one({'Session':message.source,'Url':hospital_url}) == None:
+                sign_back = sign_in(hospital_url,task,message)
+                return sign_back
             else:
-                return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
+                return "已经成功登录，请继续挂号"
         if news.encode('utf-8') == '3':
             col1.delete_one({'Session': message.source.encode('utf-8')})
             col4.delete_one({'Session': message.source.encode('utf-8')})
