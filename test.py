@@ -13,10 +13,10 @@ def get_verify(hospital_url):
     response= session.get(url)
     response_headers = response.headers
     response_data = response.content
-    file = open('/root/myproject/guahaoimage.jpg','wb')
+    file = open('image.jpg','wb')
     file.write(response_data)
     file.close()
-    image = Image.open('/root/myproject/guahaoimage.jpg')
+    image = Image.open('image.jpg')
     code = pytesseract.image_to_string(image)
 
     session_id = ''.join(re.findall('ASP.NET_SessionId=(.*); path=/;',response_headers['Set-Cookie']))
