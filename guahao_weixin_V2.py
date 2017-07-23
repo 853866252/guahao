@@ -240,13 +240,21 @@ def hello(message, session):
             else:
                 return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
         elif trans['Doctor'] == '':
-
-            if col2.find_one({'Name': message.content.encode('utf-8')}) == None:
-                return "没有找到该医生，请重新输入医生姓名："
-            else:
-                col1.update({'Session': message.source.encode('utf-8')},
-                            {'$set': {'Doctor': message.content.encode('utf-8')}})
-                return "您选择医生：{}，请输入挂号时间：\n1.现在\n2.明天抢号\n3.取消挂号".format(message.content.encode('utf-8'))
+            trans = col1.find_one({'Session': message.source.encode('utf-8')})
+            if trans['Url'] == 'book.xachyy.com':
+                if col2.find_one({'Name': message.content.encode('utf-8')}) == None:
+                    return "没有找到该医生，请重新输入医生姓名："
+                else:
+                    col1.update({'Session': message.source.encode('utf-8')},
+                                {'$set': {'Doctor': message.content.encode('utf-8')}})
+                    return "您选择医生：{}，请输入挂号时间：\n1.现在\n2.明天抢号\n3.取消挂号".format(message.content.encode('utf-8'))
+            elif trans['Url'] == 'www.83215321.com':
+                if col5.find_one({'Name': message.content.encode('utf-8')}) == None:
+                     return "没有找到该医生，请重新输入医生姓名："
+                else:
+                     col1.update({'Session': message.source.encode('utf-8')},
+                                 {'$set': {'Doctor': message.content.encode('utf-8')}})
+                     return "您选择医生：{}，请输入挂号时间：\n1.现在\n2.明天抢号\n3.取消挂号".format(message.content.encode('utf-8'))
         elif trans['Time'] == '':
             news = message.content
             if news.encode('utf-8') == '1':
