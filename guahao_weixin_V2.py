@@ -111,6 +111,7 @@ def get_book_time(html):
     for each in doctor_date:
         time = each.split('\',\'')
         date_time['Date'] = time[1]
+        date_time['TimePartType'] = time[2]
         date_time['Time'] = time[3]
         break
     return date_time
@@ -132,9 +133,9 @@ def get_book_items(doctor_info,URL):
 
 def register(patient_info,doctor_info,date_time,URL):
     if URL == 'book.xachyy.com':
-        url = 'http://{URL1}/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId={patientid}&clinicLabelId='.format(URL1=URL,patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
+        url = 'http://{URL1}/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId={patientid}&clinicLabelId='.format(URL1=URL,patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType='+date_time['TimePartType']+'&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
     elif URL == 'www.83215321.com':
-        url = 'http://{URL1}/Doctor/ajax.aspx?param=order&hospitalId=61010001&patientId={patientid}&clinicLabelId='.format(URL1=URL,patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
+        url = 'http://{URL1}/Doctor/ajax.aspx?param=order&hospitalId=61010001&patientId={patientid}&clinicLabelId='.format(URL1=URL,patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType='+date_time['TimePartType']+'&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
     session = requests.Session()
     html = session.post(url).content
     return html
