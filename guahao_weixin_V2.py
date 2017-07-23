@@ -163,7 +163,7 @@ def get_verify_register(session):
             col1.delete_one({'Session': session})
             return "已经准备明天为您抢号，请耐心等待"
 
-
+#@check
 def sign_in(hospital_url,task,message):
     if hospital_url == 'book.xachyy.com':
         session_id, code_id = get_verify_xachyy(hospital_url)
@@ -179,6 +179,12 @@ def sign_in(hospital_url,task,message):
     else:
         return "请重新输入序号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
 
+#def check(fuc):
+#    if col3.find_one({'Session': message.source, 'Url': hospital_url}) == None:
+#        sign_back = sign_in(hospital_url, task, message)
+#        return sign_back
+#    else:
+#        return "已经成功登录，请继续挂号"
 
 
 
@@ -199,11 +205,12 @@ def hello(message, session):
         task = news.split('/')
         if task[0].encode('utf-8') == '登录':
             hospital_url = trans['Url']
-            if col3.find_one({'Session':message.source,'Url':hospital_url}) == None:
-                sign_back = sign_in(hospital_url,task,message)
+            if col3.find_one({'Session': message.source, 'Url': hospital_url}) == None:
+                sign_back = sign_in(hospital_url, task, message)
                 return sign_back
             else:
                 return "已经成功登录，请继续挂号"
+
         if news.encode('utf-8') == '3':
             col1.delete_one({'Session': message.source.encode('utf-8')})
             col4.delete_one({'Session': message.source.encode('utf-8')})
