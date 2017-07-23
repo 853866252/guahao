@@ -17,11 +17,12 @@ robot = werobot.WeRoBot(token='ce1Jcs')
 
 client = pymongo.MongoClient(host='172.17.76.183', port=27017)
 database1 = client.Register
-database2 = client.xachyy_DBS
+database2 = client.Hospital_DBS
 col1 = database1.Transaction
-col2 = database2.doctor_info
+col2 = database2.doctor_xachyy_info
 col3 = database1.Patient_info
 col4 = database1.Transaction_plan
+col5 = database2.doctor_xijing_info
 
 def get_source(url):
     session = requests.session()
@@ -114,14 +115,14 @@ def get_book_time(html):
         break
     return date_time
 
-def get_book_items(doctor_info):
+def get_book_items(doctor_info,URL):
 
     date1 = str(datetime.date.today().replace(day=1))
     date2 = str(datetime.date.today().replace(day=1) - datetime.timedelta(-31))
     datelist = [date1,date2]
     date_time = {}
     for each in datelist:
-        url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
+        url = 'http://'+URL+'/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
         html = get_source(url)
         date_time = get_book_time(html)
         if date_time != {}:
@@ -129,8 +130,8 @@ def get_book_items(doctor_info):
     return date_time
 
 
-def register(patient_info,doctor_info,date_time):
-    url = 'http://book.xachyy.com/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId={patientid}&clinicLabelId='.format(patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
+def register(patient_info,doctor_info,date_time,URL):
+    url = 'http://{URL1}/Doctor/ajax.aspx?param=order&hospitalId=61010021&patientId={patientid}&clinicLabelId='.format(URL1=URL,patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType=1&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
     session = requests.Session()
     html = session.post(url).content
     return html
@@ -144,11 +145,11 @@ def get_verify_register(session):
         if task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西安市儿童医院':
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session})
-            date_time = get_book_items(doctor_info)
+            date_time = get_book_items(doctor_info,patientinfo['Url'])
             print date_time
             print type(date_time)
             if date_time != {}:
-                back = register(patientinfo, doctor_info, date_time)
+                back = register(patientinfo, doctor_info, date_time,patientinfo['Url'])
                 col1.delete_one({'Session': session})
                 return back
             else:
@@ -156,7 +157,19 @@ def get_verify_register(session):
                 print '1'
                 return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
         elif task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西京':
-            pass
+            doctor_info = col5.find_one({'Name': task['Doctor']})
+            patientinfo = col3.find_one({'Session': session,'Url':'www.83215321.com'})
+            date_time = get_book_items(doctor_info,patientinfo['Url'])
+            print date_time
+            print type(date_time)
+            if date_time != {}:
+                back = register(patientinfo, doctor_info, date_time,patientinfo['Url'])
+                col1.delete_one({'Session': session})
+                return back
+            else:
+                #                col1.delete_one({'Session': session})
+                print '1'
+                return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
         else:
 
             col4.insert(task)

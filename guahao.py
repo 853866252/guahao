@@ -163,8 +163,8 @@ if __name__ == '__main__':
         n = input('please input number:')
         if n == 1:
             client = pymongo.MongoClient(host='172.17.76.183',port=27017)
-            database = client.xachyy_DBS
-            col = database.doctor_info
+            database = client.Hospital_DBS
+            col = database.doctor_xachyy_info
             dt_list = get_departmentid()
             #dt_list = 'Doctor/Index.aspx?id=6101002110268008'
             doctor_list = get_doctor_list(dt_list)
