@@ -105,6 +105,7 @@ def get_patientId_xijing(weixin_session, indentify_id, password, hospital_url):
                 return "登录用户名或密码错误，请重新输入"
 
 def get_book_time(html):
+    print html
     date_time = {}
     dt_time = lxml.html.document_fromstring(html)
     doctor_date = dt_time.xpath('//img/@onclick')
