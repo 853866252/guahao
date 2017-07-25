@@ -271,14 +271,14 @@ def hello(message, session):
 
             elif news.encode('utf-8') == '2':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
-                back_message = get_verify_register(message.source.encode('utf-8'))
+                back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
                 return back_message
 
             else:
                 return "请输入正确序号：1.现在\n2.明天抢号\n3.取消挂号"
         else:
 
-            back_message = get_verify_register(message.source.encode('utf-8'))
+            back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
             print '3'
             print back_message
             return back_message
