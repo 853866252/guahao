@@ -159,7 +159,7 @@ def get_verify_register(session,url):
                 return back
             else:
 #                col1.delete_one({'Session': session})
-                print '1'
+                print '3'
                 return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
         elif task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西京医院':
             doctor_info = col5.find_one({'Name': task['Doctor']})
