@@ -126,6 +126,7 @@ def get_book_items(doctor_info,URL):
         url = 'http://'+URL+'/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
         html = get_source(url)
         date_time = get_book_time(html)
+        print date_time
         if date_time != {}:
             break
     return date_time
@@ -140,9 +141,9 @@ def register(patient_info,doctor_info,date_time,URL):
     html = session.post(url).content
     return html
 
-def get_verify_register(session):
+def get_verify_register(session,url):
 
-    if col3.find_one({'Session': session}) == None:
+    if col3.find_one({'Session': session,'Url':url}) == None:
         return "请按照如下格式进行登录验证，（登录/用户名/密码），此登录仅需一次,若没有账号请先到官网注册"
     else:
         task = col1.find_one({'Session': session})
@@ -263,7 +264,7 @@ def hello(message, session):
             news = message.content
             if news.encode('utf-8') == '1':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
-                back_message = get_verify_register(message.source.encode('utf-8'))
+                back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
                 print '2'
                 print back_message
                 return back_message
