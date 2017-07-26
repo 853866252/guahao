@@ -138,6 +138,7 @@ def register(patient_info,doctor_info,date_time,URL):
         url = 'http://{URL1}/Doctor/ajax.aspx?param=order&hospitalId=61010001&patientId={patientid}&clinicLabelId='.format(URL1=URL,patientid=patient_info['Accoutid'])+doctor_info['ClinicLabelId'].encode("utf-8")+'&clinicDate='+date_time['Date']+'&timePartType='+date_time['TimePartType']+'&timePart='+date_time['Time']+'&channcelType=3&rsvmodel=1&returnVisitId=1'
     session = requests.Session()
     html = session.post(url).content
+    print html
     return html
 
 def get_verify_register(session,url):
