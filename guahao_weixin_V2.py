@@ -151,7 +151,7 @@ def get_verify_register(session,url):
         return "请按照如下格式进行登录验证，（登录/用户名/密码），此登录仅需一次,若没有账号请先到官网注册"
     else:
         task = col1.find_one({'Session': session})
-        if task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西安儿童医院':
+        if task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西安市儿童医院':
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session,'Url':url})
             print patientinfo
