@@ -151,12 +151,10 @@ def get_verify_register(session,url):
             patientinfo = col3.find_one({'Session': session,'Url':'book.xachyy.com'})
             date_time = get_book_items(doctor_info,patientinfo['Url'])
             if date_time != {}:
-                back = register(patientinfo, doctor_info, date_time,patientinfo['Url'])
+                back1 = register(patientinfo, doctor_info, date_time,patientinfo['Url'])
                 col1.delete_one({'Session': session})
-                return back
+                return back1
             else:
-#                col1.delete_one({'Session': session})
-                print '3'
                 return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
         elif task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西京医院':
             doctor_info = col5.find_one({'Name': task['Doctor']})
@@ -165,12 +163,10 @@ def get_verify_register(session,url):
             print date_time
             print type(date_time)
             if date_time != {}:
-                back = register(patientinfo, doctor_info, date_time,patientinfo['Url'])
+                back2 = register(patientinfo, doctor_info, date_time,patientinfo['Url'])
                 col1.delete_one({'Session': session})
-                return back
+                return back2
             else:
-                #                col1.delete_one({'Session': session})
-                print '1'
                 return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
         else:
 
