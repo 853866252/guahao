@@ -72,7 +72,6 @@ def get_patientId_xachyy(weixin_session,session_id,code_id,indentify_id,password
     else:
         return "登录用户名或密码错误，请重新输入"
 
-
 def get_patientId_xijing(weixin_session, indentify_id, password, hospital_url):
 
     patient = {}
@@ -159,6 +158,7 @@ def get_verify_register(session,url):
             if date_time != {}:
                 back1 = register(patientinfo, doctor_info, date_time,url)
                 col1.delete_one({'Session': session})
+                print 4
                 print back1
                 return back1
             else:
@@ -263,7 +263,7 @@ def hello(message, session):
             if news.encode('utf-8') == '1':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
                 back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
-                print back_message
+                print 5
                 return back_message
 
             if news.encode('utf-8') == '2':
