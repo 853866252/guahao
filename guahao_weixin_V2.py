@@ -152,7 +152,7 @@ def get_verify_register(session,url):
         task = col1.find_one({'Session': session})
         if task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西安市儿童医院':
             doctor_info = col2.find_one({'Name': task['Doctor']})
-            patientinfo = col3.find_one({'Session': session})
+            patientinfo = col3.find_one({'Session': session,'Url':'book.xachyy.com'})
             date_time = get_book_items(doctor_info,patientinfo['Url'])
             print date_time
             print type(date_time)
