@@ -123,6 +123,7 @@ def get_book_items(doctor_info,URL):
     date2 = str(datetime.date.today().replace(day=1) - datetime.timedelta(-31))
     datelist = [date1,date2]
     date_time = {}
+    print datelist
     for each in datelist:
         url = 'http://{URL2}/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='.format(URL2=URL)+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
         print url
