@@ -118,6 +118,7 @@ def get_book_time(html):
 
 def get_book_items(doctor_info,URL):
     print URL
+    print type(URL)
     date1 = str(datetime.date.today().replace(day=1))
     date2 = str(datetime.date.today().replace(day=1) - datetime.timedelta(-31))
     datelist = [date1,date2]
