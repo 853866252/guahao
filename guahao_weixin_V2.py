@@ -125,11 +125,8 @@ def get_book_items(doctor_info,URL):
     date_time = {}
     for each in datelist:
         url = 'http://'+URL+'/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
-        print url
         html = get_source(url)
-        print html
         date_time = get_book_time(html)
-        print date_time
         if date_time != {}:
             break
     return date_time
@@ -154,8 +151,6 @@ def get_verify_register(session,url):
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session,'Url':'book.xachyy.com'})
             date_time = get_book_items(doctor_info,patientinfo['Url'])
-            print date_time
-            print type(date_time)
             if date_time != {}:
                 back = register(patientinfo, doctor_info, date_time,patientinfo['Url'])
                 col1.delete_one({'Session': session})
@@ -304,7 +299,7 @@ def hello(message, session):
             transaction_dict['Time'] = ''
             transaction_dict['Pay'] = '1'
             col1.insert(transaction_dict)
-            return "请输入您要就诊的医院编号：\n1.西京\n2.西安市儿童医院\n3.取消挂号"
+            return "请输入您要就诊的医院编号：\n1.西京医院\n2.西安市儿童医院\n3.取消挂号"
         else:
             url = 'http://www.tuling123.com/openapi/api'
             datas = {}
