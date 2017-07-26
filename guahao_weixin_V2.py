@@ -124,7 +124,7 @@ def get_book_items(doctor_info,URL):
     datelist = [date1,date2]
     date_time = {}
     for each in datelist:
-        url = 'http://'+URL.encode("utf-8")+'/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
+        url = 'http://'+URL+'/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
         print url
         html = get_source(url)
         date_time = get_book_time(html)
@@ -154,7 +154,7 @@ def get_verify_register(session,url):
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session,'Url':url})
             print patientinfo
-            date_time = get_book_items(doctor_info,patientinfo['Url'])
+            date_time = get_book_items(doctor_info,patientinfo['Url'].encode("utf-8"))
             if date_time != {}:
                 back1 = register(patientinfo, doctor_info, date_time,patientinfo['Url'])
                 col1.delete_one({'Session': session})
