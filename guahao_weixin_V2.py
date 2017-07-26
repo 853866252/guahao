@@ -105,7 +105,6 @@ def get_patientId_xijing(weixin_session, indentify_id, password, hospital_url):
                 return "登录用户名或密码错误，请重新输入"
 
 def get_book_time(html):
-    print html
     date_time = {}
     dt_time = lxml.html.document_fromstring(html)
     doctor_date = dt_time.xpath('//img/@onclick')
@@ -126,7 +125,9 @@ def get_book_items(doctor_info,URL):
     date_time = {}
     for each in datelist:
         url = 'http://'+URL+'/Doctor/ajax.aspx?param=GetBookInfoByDoctorId&uimode=1&clinicLabelId='+doctor_info['ClinicLabelId'].encode("utf-8")+'&cliniclabeltype=2&clinicweektype=0&rsvmodel=1&doctorid='+doctor_info['DoctorID'].encode("utf-8")+'&selectTime='+each
+        print url
         html = get_source(url)
+        print html
         date_time = get_book_time(html)
         print date_time
         if date_time != {}:
