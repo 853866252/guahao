@@ -14,6 +14,7 @@ import lxml
 import lxml.html
 import datetime
 from werobot.replies import TextReply
+from werobot import client
 
 
 robot = werobot.WeRoBot(token='ce1Jcs')
@@ -23,7 +24,8 @@ robot = werobot.WeRoBot(token='ce1Jcs')
 robot.config["APP_ID"] = "wxbc74d8ad0c8b6a18"
 robot.config["APP_SECRET"] = "2ed273df5736c71f306d6cf22ed835ae"
 
-client = robot.client
+
+
 
 
 client_db = pymongo.MongoClient(host='172.17.76.183', port=27017)
@@ -213,14 +215,14 @@ def sign_in(hospital_url,task,message):
 #    else:
 #        return "已经成功登录，请继续挂号"
 
-client.create_menu({
+
+werobot.client.Client.create_menu({
     "button":[{
          "type": "click",
          "name": "今日歌曲",
          "key": "music"
     }]
 })
-
 
 @robot.subscribe
 def intro(message):
