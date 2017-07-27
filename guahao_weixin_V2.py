@@ -145,7 +145,6 @@ def register(patient_info,doctor_info,date_time,URL):
     return html
 
 def get_verify_register(session,url):
-
     if col3.find_one({'Session': session,'Url':url}) == None:
         return "请按照如下格式进行登录验证，（登录/用户名/密码），此登录仅需一次,若没有账号请先到官网注册"
     else:
@@ -161,7 +160,7 @@ def get_verify_register(session,url):
                 print 4
                 print back1
                 print type(back1)
-                return back1
+                return (back1)
             else:
                 return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
         elif task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西京医院':
@@ -214,9 +213,7 @@ def intro(message):
 
 @robot.text
 def hello(message, session):
-
     trans = col1.find_one({'Session':message.source.encode('utf-8')})
-
     if trans != None:
         news = message.content
         task = news.split('/')
@@ -286,7 +283,6 @@ def hello(message, session):
             group = each['Hospital'].encode('utf-8')+':'+each['Doctor'].encode('utf-8')
             b.append(group)
         return '\n'.join(b)
-
     else:
         task = message.content
         if "挂号" in task.encode('utf-8'):
