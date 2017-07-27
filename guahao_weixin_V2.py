@@ -14,11 +14,21 @@ import lxml
 import lxml.html
 import datetime
 from werobot.replies import TextReply
+
+
 robot = werobot.WeRoBot(token='ce1Jcs')
 
-client = pymongo.MongoClient(host='172.17.76.183', port=27017)
-database1 = client.Register
-database2 = client.Hospital_DBS
+
+
+robot.config["APP_ID"] = "wxbc74d8ad0c8b6a18"
+robot.config["APP_SECRET"] = "ren466213581"
+
+client = robot.client
+
+
+client_db = pymongo.MongoClient(host='172.17.76.183', port=27017)
+database1 = client_db.Register
+database2 = client_db.Hospital_DBS
 col1 = database1.Transaction
 col2 = database2.doctor_xachyy_info
 col3 = database1.Patient_info
@@ -204,38 +214,12 @@ def sign_in(hospital_url,task,message):
 #        return "已经成功登录，请继续挂号"
 
 client.create_menu({
-    "button":[
-        {
-            "type":"click",
-            "name":"今日歌曲",
-            "key":"V1001_TODAY_MUSIC"
-        },
-        {
-            "type":"click",
-            "name":"歌手简介",
-            "key":"V1001_TODAY_SINGER"
-        },
-        {
-            "name":"菜单",
-            "sub_button":[
-                {
-                    "type":"view",
-                    "name":"搜索",
-                    "url":"http://www.soso.com/"
-                },
-                {
-                    "type":"view",
-                    "name":"视频",
-                    "url":"http://v.qq.com/"
-                },
-                {
-                    "type":"click",
-                    "name":"赞一下我们",
-                    "key":"V1001_GOOD"
-                }
-            ]
-        }
-    ]})
+    "button":[{
+         "type": "click",
+         "name": "今日歌曲",
+         "key": "music"
+    }]
+})
 
 
 @robot.subscribe
