@@ -217,11 +217,11 @@ def sign_in(hospital_url,task,message):
 
 
 werobot.client.Client.create_menu({
-    "button":[{
+    "button":{
          "type": "click",
          "name": "今日歌曲",
          "key": "music"
-    }]
+    }
 })
 
 @robot.subscribe
