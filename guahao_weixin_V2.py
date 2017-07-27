@@ -18,8 +18,8 @@ from werobot import client
 
 
 robot = werobot.WeRoBot(token='ce1Jcs')
-robot.config["APP_ID"] = "wxbc74d8ad0c8b6a18"
-robot.config["APP_SECRET"] = "2ed273df5736c71f306d6cf22ed835ae"
+#robot.config["APP_ID"] = "wxbc74d8ad0c8b6a18"
+#robot.config["APP_SECRET"] = "2ed273df5736c71f306d6cf22ed835ae"
 
 menu_data={
     "button":[
