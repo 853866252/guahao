@@ -214,15 +214,15 @@ def sign_in(hospital_url,task,message):
 #        return sign_back
 #    else:
 #        return "已经成功登录，请继续挂号"
-
-
-werobot.client.Client.create_menu({
-    "button":{
+metadate = {
+    "button":[{
          "type": "click",
          "name": "今日歌曲",
          "key": "music"
-    }
-})
+    }]
+}
+
+werobot.client.Client.create_menu(metadate)
 
 @robot.subscribe
 def intro(message):
