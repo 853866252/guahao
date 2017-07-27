@@ -13,6 +13,7 @@ import pymongo
 import lxml
 import lxml.html
 import datetime
+from werobot.replies import TextReply
 robot = werobot.WeRoBot(token='ce1Jcs')
 
 client = pymongo.MongoClient(host='172.17.76.183', port=27017)
@@ -260,9 +261,11 @@ def hello(message, session):
             news = message.content
             if news.encode('utf-8') == '1':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
+                reply = TextReply(message=message, content='success')
+                reply.process_args()
                 back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
                 print 5
-                check_back = back_message
+                return back_message
 
             elif news.encode('utf-8') == '2':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
@@ -277,7 +280,6 @@ def hello(message, session):
 
             back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
             print '3'
-            print back_message
             return back_message
 
     else:
