@@ -156,7 +156,7 @@ def get_verify_register(session,url):
             date_time = get_book_items(doctor_info,patientinfo['Url'].encode("utf-8"))
             if date_time != {}:
                 back1 = register(patientinfo, doctor_info, date_time,url)
-                col1.delete_one({'Session': session})
+#                col1.delete_one({'Session': session})
                 print 4
                 print back1
                 print type(back1)
@@ -279,7 +279,7 @@ def hello(message, session):
             print '3'
             print back_message
             return back_message
-        return check_back
+
     else:
         task = message.content
         if "挂号" in task.encode('utf-8'):
