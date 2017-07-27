@@ -160,6 +160,7 @@ def get_verify_register(session,url):
                 col1.delete_one({'Session': session})
                 print 4
                 print back1
+                print type(back1)
                 return back1
             else:
                 return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
