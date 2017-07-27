@@ -14,46 +14,20 @@ import lxml
 import lxml.html
 import datetime
 from werobot.replies import TextReply
-from werobot import client
+
 
 
 robot = werobot.WeRoBot(token='ce1Jcs')
-#robot.config["APP_ID"] = "wxbc74d8ad0c8b6a18"
-#robot.config["APP_SECRET"] = "2ed273df5736c71f306d6cf22ed835ae"
+robot.config["APP_ID"] = "wxbc74d8ad0c8b6a18"
+robot.config["APP_SECRET"] = "2ed273df5736c71f306d6cf22ed835ae"
 
 menu_data={
-    "button":[
-        {
-            "type":"click",
-            "name":"今日歌曲",
-            "key":"V1001_TODAY_MUSIC"
-        },
-        {
-            "type":"click",
-            "name":"歌手简介",
-            "key":"V1001_TODAY_SINGER"
-        },
-        {
-            "name":"菜单",
-            "sub_button":[
-                {
-                    "type":"view",
-                    "name":"搜索",
-                    "url":"http://www.soso.com/"
-                },
-                {
-                    "type":"view",
-                    "name":"视频",
-                    "url":"http://v.qq.com/"
-                },
-                {
-                    "type":"click",
-                    "name":"赞一下我们",
-                    "key":"V1001_GOOD"
-                }
-            ]
-        }
-    ]}
+    "button":[{
+         "type": "click",
+         "name": "今日歌曲",
+         "key": "music"
+    }]
+}
 
 robot.client.create_menu(menu_data)
 
@@ -261,7 +235,9 @@ def sign_in(hospital_url,task,message):
 def intro(message):
     return "欢迎来到任式机器，公众号提供自动预定挂号及抢号服务。预想挂号请输入：挂号（目前仅支持西安市儿童医院）"
 
-
+@robot.key_click("music")
+def music(message):
+    return '你点击了“今日歌曲”按钮'
 
 @robot.text
 def hello(message, session):
