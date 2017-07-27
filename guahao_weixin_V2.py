@@ -262,9 +262,9 @@ def hello(message, session):
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
                 back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
                 print 5
-                return "chenggong"
+                return back_message
 
-            if news.encode('utf-8') == '2':
+            elif news.encode('utf-8') == '2':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
                 back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
                 return back_message
@@ -277,12 +277,6 @@ def hello(message, session):
             print '3'
             print back_message
             return back_message
-    elif '查看预约' in message.content.encode('utf-8'):
-        b = []
-        for each in col4.find({'Session': message.source.encode('utf-8')}):
-            group = each['Hospital'].encode('utf-8')+':'+each['Doctor'].encode('utf-8')
-            b.append(group)
-        return '\n'.join(b)
     else:
         task = message.content
         if "挂号" in task.encode('utf-8'):
@@ -296,6 +290,12 @@ def hello(message, session):
             transaction_dict['Pay'] = '1'
             col1.insert(transaction_dict)
             return "请输入您要就诊的医院编号：\n1.西京医院\n2.西安市儿童医院\n3.取消挂号"
+        if '查看预约' in message.content.encode('utf-8'):
+            b = []
+            for each in col4.find({'Session': message.source.encode('utf-8')}):
+                group = each['Hospital'].encode('utf-8') + ':' + each['Doctor'].encode('utf-8')
+                b.append(group)
+            return '\n'.join(b)
         else:
             url = 'http://www.tuling123.com/openapi/api'
             datas = {}
