@@ -262,7 +262,7 @@ def hello(message, session):
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
                 back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
                 print 5
-                news = back_message
+                check_back = back_message
 
             elif news.encode('utf-8') == '2':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '明天'}})
@@ -271,7 +271,7 @@ def hello(message, session):
 
             else:
                 return "请输入正确序号：1.现在\n2.明天抢号\n3.取消挂号"
-            return news
+
 
         else:
 
@@ -279,6 +279,7 @@ def hello(message, session):
             print '3'
             print back_message
             return back_message
+        return check_back
     else:
         task = message.content
         if "挂号" in task.encode('utf-8'):
