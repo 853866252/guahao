@@ -149,8 +149,7 @@ def get_verify_register(session,url):
         return "请按照如下格式进行登录验证，（登录/用户名/密码），此登录仅需一次,若没有账号请先到官网注册"
     else:
         task = col1.find_one({'Session': session})
-        if task['Time'].encode('utf-8') == '现在':
-#            and task['Hospital'].encode('utf-8') == '西安市儿童医院'
+        if task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西安市儿童医院':
             doctor_info = col2.find_one({'Name': task['Doctor']})
             patientinfo = col3.find_one({'Session': session,'Url':url})
             print patientinfo
@@ -164,16 +163,16 @@ def get_verify_register(session,url):
                 return (back1)
             else:
                 return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
-#        elif task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西京医院':
-#            doctor_info = col5.find_one({'Name': task['Doctor']})
-#            patientinfo = col3.find_one({'Session': session,'Url':url})
-#            date_time = get_book_items(doctor_info,patientinfo['Url'])
-#            if date_time != {}:
-#                back2 = register(patientinfo, doctor_info, date_time,url)
-#                col1.delete_one({'Session': session})
-#                return back2
-#            else:
-#                return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
+        elif task['Time'].encode('utf-8') == '现在' and task['Hospital'].encode('utf-8') == '西京医院':
+            doctor_info = col5.find_one({'Name': task['Doctor']})
+            patientinfo = col3.find_one({'Session': session,'Url':url})
+            date_time = get_book_items(doctor_info,patientinfo['Url'])
+            if date_time != {}:
+                back2 = register(patientinfo, doctor_info, date_time,url)
+                col1.delete_one({'Session': session})
+                return back2
+            else:
+                return "挂号没有开始或者已经预定完！\n请输入3取消预约该预约流程。\n\n您也可以选择其他医生或者选择明日抢号"
         else:
 
             col4.insert(task)
