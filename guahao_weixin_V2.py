@@ -22,15 +22,15 @@ robot = werobot.WeRoBot(token='ce1Jcs')
 robot.config["APP_ID"] = "wxbc74d8ad0c8b6a18"
 robot.config["APP_SECRET"] = "2ed273df5736c71f306d6cf22ed835ae"
 
-menu_data={
-    "button":[{
-         "type": "click",
-         "name": "今日歌曲",
-         "key": "music"
-    }]
-}
-
-robot.client.create_menu(menu_data)
+#menu_data={
+#    "button":[{
+#         "type": "click",
+#         "name": "今日歌曲",
+#         "key": "music"
+#    }]
+#}
+#
+#robot.client.create_menu(menu_data)
 
 
 
@@ -222,15 +222,15 @@ def sign_in(hospital_url,task,message):
 #        return sign_back
 #    else:
 #        return "已经成功登录，请继续挂号"
-#metadate = {
-#    "button":[{
-#         "type": "click",
-#         "name": "今日歌曲",
-#         "key": "music"
-#    }]
-#}
-#
-#werobot.client.Client.create_menu(metadate)
+metadate = {
+    "button":[{
+         "type": "click",
+         "name": "今日歌曲",
+         "key": "music"
+    }]
+}
+
+werobot.client.Client.create_menu(metadate)
 
 @robot.subscribe
 def intro(message):
