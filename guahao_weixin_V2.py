@@ -12,8 +12,10 @@ import pymongo
 import lxml
 import lxml.html
 import datetime
+import ssl
 from werobot.replies import TextReply
 
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 robot = werobot.WeRoBot(token='ce1Jcs')
