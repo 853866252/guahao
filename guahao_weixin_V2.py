@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 import werobot
 import sqlite3
-from werobot import WeRoBot
 import pytesseract
 from PIL import Image
 import hashlib
