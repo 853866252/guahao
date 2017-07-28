@@ -225,7 +225,7 @@ def sign_in(hospital_url,task,message):
 metadata = {
     "button":{
          "type": "click",
-         "name": "今日歌曲",
+         "name": "today",
          "key": "music"
     }
 }
