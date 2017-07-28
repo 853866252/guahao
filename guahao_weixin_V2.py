@@ -222,7 +222,7 @@ def sign_in(hospital_url,task,message):
 #        return sign_back
 #    else:
 #        return "已经成功登录，请继续挂号"
-metadate = {
+metadata = {
     "button":[{
          "type": "click",
          "name": "今日歌曲",
@@ -230,7 +230,7 @@ metadate = {
     }]
 }
 
-werobot.client.Client.create_menu(metadate)
+robot.client.create_menu(metadata)
 
 @robot.subscribe
 def intro(message):
