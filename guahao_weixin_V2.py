@@ -223,11 +223,11 @@ def sign_in(hospital_url,task,message):
 #    else:
 #        return "已经成功登录，请继续挂号"
 metadata = {
-    "button":[{
+    "button":{
          "type": "click",
          "name": "今日歌曲",
          "key": "music"
-    }]
+    }
 }
 
 robot.client.create_menu(metadata)
