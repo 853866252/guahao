@@ -240,6 +240,11 @@ def intro(message):
 def music(message):
     return '你点击了“今日歌曲”按钮'
 
+
+@robot.filter("a")
+def a():
+    return "正文为 a "
+
 @robot.text
 def hello(message, session):
     trans = col1.find_one({'Session':message.source.encode('utf-8')})
@@ -289,8 +294,8 @@ def hello(message, session):
             news = message.content
             if news.encode('utf-8') == '1':
                 col1.update({'Session': message.source.encode('utf-8')}, {'$set': {'Time': '现在'}})
-                reply = TextReply(message=message, content='success')
-                reply.process_args()
+#                reply = TextReply(message=message, content='success')
+#                reply.process_args()
                 back_message = get_verify_register(message.source.encode('utf-8'),trans['Url'])
                 print 5
                 return back_message
